@@ -1,886 +1,975 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="fr" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لوحة التحكم الإدارية | Bella Skills HUB</title>
+<title>Bella Skills HUB | Executive Admin Dashboard</title>
 
-<!-- الخطوط الرسمية -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-
-<!-- مكتبة الرسوم البيانية Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 
 <style>
-:root {
-    --purple: #7525B5;
-    --purple-dark: #42105F;
-    --purple-light: #B97AE8;
-    --purple-soft: #F4EEFB;
-    --bg: #F8F9FD;
-    --surface: #FFFFFF;
-    --border: #E8E5EE;
-    --text-main: #201826;
-    --text-muted: #6E6877;
-    --success: #27AE60;
-    --warning: #F39C12;
-    --danger: #E74C3C;
-    --info: #2980B9;
-    --sidebar-width: 260px;
-    --shadow: 0 4px 20px rgba(66, 16, 95, 0.06);
+:root{
+    --purple:#7525B5;
+    --purple-dark:#42105F;
+    --purple-light:#B97AE8;
+    --purple-soft:#F5EFFC;
+    --bg:#F4F2F7;
+    --surface:#FFFFFF;
+    --border:#E5E0EB;
+    --text:#241A2B;
+    --muted:#7A7482;
+    --success:#27AE60;
+    --warning:#E67E22;
+    --danger:#C0392B;
+    --shadow:0 12px 35px rgba(66,16,95,.08);
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Cairo', sans-serif;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"DM Sans",sans-serif;
+    -webkit-tap-highlight-color: transparent;
 }
 
-body {
-    background: var(--bg);
-    color: var(--text-main);
-    display: flex;
-    min-height: 100vh;
-    overflow-x: hidden;
+body{
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
 }
 
-/* ================== شاشة تسجيل الدخول المنفصلة ================== */
-#authOverlay {
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at 10% 20%, #42105F 0%, #200B30 100%);
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+/* =========================================================
+   LOGIN SCREEN OVERLAY
+========================================================= */
+#loginGate{
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    background:linear-gradient(135deg, #241031 0%, #42105F 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
 }
 
-.auth-card {
-    background: #FFFFFF;
-    border-radius: 20px;
-    padding: 40px 35px;
-    width: min(440px, 100%);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.3);
-    text-align: center;
+.login-card{
+    background:white;
+    width:min(440px, 100%);
+    padding:40px 32px;
+    border-radius:24px;
+    box-shadow:0 25px 70px rgba(0,0,0,.35);
+    text-align:center;
 }
 
-.auth-card img {
-    width: 60px;
-    height: 60px;
-    border-radius: 14px;
-    margin-bottom: 15px;
+.login-card img{
+    width:64px;
+    height:64px;
+    border-radius:14px;
+    margin-bottom:16px;
 }
 
-.auth-card h2 {
-    color: var(--purple-dark);
-    font-size: 24px;
-    margin-bottom: 8px;
-    font-weight: 800;
+.login-card h2{
+    font-size:22px;
+    color:var(--purple-dark);
+    margin-bottom:6px;
 }
 
-.auth-card p {
-    color: var(--text-muted);
-    font-size: 13.5px;
-    margin-bottom: 25px;
+.login-card p{
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:24px;
 }
 
-/* ================== التخطيط العام ================== */
-.sidebar {
-    width: var(--sidebar-width);
-    background: var(--surface);
-    border-left: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: 0;
+/* =========================================================
+   LAYOUT (SIDEBAR + MAIN CONTENT)
+========================================================= */
+.sidebar{
+    width:270px;
+    background:var(--purple-dark);
+    color:white;
+    display:flex;
+    flex-direction:column;
+    flex-shrink:0;
+    position:sticky;
+    top:0;
+    height:100vh;
+    border-right:1px solid rgba(255,255,255,.08);
     z-index: 100;
-    transition: transform 0.3s ease;
 }
 
-.sidebar-header {
-    padding: 22px 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border-bottom: 1px solid var(--border);
+.sidebar-header{
+    padding:26px 22px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    border-bottom:1px solid rgba(255,255,255,.08);
 }
 
-.sidebar-header img {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
+.sidebar-header img{
+    width:42px;
+    height:42px;
+    border-radius:10px;
 }
 
-.sidebar-header h3 {
-    font-size: 17px;
-    color: var(--purple-dark);
-    font-weight: 800;
-    line-height: 1.2;
+.brand-text{
+    font-size:16px;
+    font-weight:800;
+    letter-spacing:.5px;
+    line-height:1.2;
 }
 
-.sidebar-nav {
-    padding: 15px 12px;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex-grow: 1;
-    overflow-y: auto;
+.brand-text small{
+    display:block;
+    color:var(--purple-light);
+    font-size:10px;
+    letter-spacing:2px;
 }
 
-.nav-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 16px;
-    border-radius: 12px;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 14px;
-    transition: all 0.2s ease;
+.sidebar-nav{
+    padding:20px 14px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    flex-grow:1;
+    overflow-y:auto;
 }
 
-.nav-item:hover, .nav-item.active {
-    background: var(--purple-soft);
-    color: var(--purple);
+.nav-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 16px;
+    color:rgba(255,255,255,.75);
+    font-size:13.5px;
+    font-weight:600;
+    border-radius:12px;
+    cursor:pointer;
+    border:none;
+    background:none;
+    width:100%;
+    text-align:left;
+    transition:.2s ease;
 }
 
-.nav-item svg {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
+.nav-item:hover{
+    background:rgba(255,255,255,.08);
+    color:white;
 }
 
-.sidebar-footer {
-    padding: 16px;
-    border-top: 1px solid var(--border);
+.nav-item.active{
+    background:var(--purple);
+    color:white;
+    box-shadow:0 6px 20px rgba(117,37,181,.35);
 }
 
-.main-wrapper {
-    margin-right: var(--sidebar-width);
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
+.badge-count{
+    margin-left:auto;
+    background:var(--danger);
+    color:white;
+    font-size:10px;
+    font-weight:800;
+    padding:2px 8px;
+    border-radius:12px;
 }
 
-.topbar {
-    height: 75px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 30px;
-    position: sticky;
-    top: 0;
-    z-index: 90;
+.sidebar-footer{
+    padding:20px 16px;
+    border-top:1px solid rgba(255,255,255,.08);
 }
 
-.mobile-toggle {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--purple-dark);
+.logout-btn{
+    width:100%;
+    background:rgba(192,57,43,.15);
+    color:#FF8585;
+    border:1px solid rgba(192,57,43,.3);
+    padding:10px;
+    border-radius:10px;
+    font-size:12.5px;
+    font-weight:700;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:.2s;
 }
 
-.user-profile {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+.logout-btn:hover{
+    background:#C0392B;
+    color:white;
 }
 
-.user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--purple-soft);
-    color: var(--purple);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 16px;
+/* MAIN CONTENT */
+.main{
+    flex-grow:1;
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+    overflow-y:auto;
 }
 
-.content-body {
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
+.topbar{
+    height:75px;
+    background:white;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 35px;
+    position:sticky;
+    top:0;
+    z-index:50;
 }
 
-/* ================== البطاقات والإحصائيات ================== */
-.kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 20px;
+.topbar h1{
+    font-size:20px;
+    font-weight:800;
+    color:var(--purple-dark);
 }
 
-.kpi-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: var(--shadow);
+.topbar-right{
+    display:flex;
+    align-items:center;
+    gap:16px;
 }
 
-.kpi-info h4 {
-    color: var(--text-muted);
-    font-size: 13px;
-    margin-bottom: 6px;
-    font-weight: 700;
+.live-indicator{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    font-weight:700;
+    color:var(--success);
+    background:#E8F8F0;
+    padding:6px 14px;
+    border-radius:20px;
 }
 
-.kpi-info .kpi-num {
-    font-size: 26px;
-    font-weight: 900;
-    color: var(--text-main);
+.live-indicator span{
+    width:8px;
+    height:8px;
+    background:var(--success);
+    border-radius:50%;
+    box-shadow:0 0 10px var(--success);
+    animation:pulse 1.8s infinite;
 }
 
-.kpi-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+@keyframes pulse{
+    0% { transform:scale(1); opacity:1; }
+    50% { transform:scale(1.4); opacity:.5; }
+    100% { transform:scale(1); opacity:1; }
 }
 
-.kpi-icon.purple { background: var(--purple-soft); color: var(--purple); }
-.kpi-icon.green { background: #E8F8F0; color: var(--success); }
-.kpi-icon.yellow { background: #FEF9E7; color: var(--warning); }
-.kpi-icon.blue { background: #EBF5FB; color: var(--info); }
-
-/* ================== المخططات البيانية ================== */
-.charts-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
+.content{
+    padding:32px 35px;
+    flex-grow:1;
 }
 
-.chart-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: var(--shadow);
+/* =========================================================
+   3D GRADIENT CARDS SYSTEM
+========================================================= */
+.stats-grid-3d{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:22px;
+    margin-bottom:35px;
+    perspective: 1000px;
 }
 
-.chart-card h3 {
-    font-size: 16px;
-    color: var(--purple-dark);
-    margin-bottom: 18px;
-    font-weight: 800;
+.card-3d{
+    border-radius:20px;
+    padding:24px 22px;
+    color:white;
+    position:relative;
+    overflow:hidden;
+    cursor:pointer;
+    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12), 0 5px 15px rgba(0,0,0,0.06);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    min-height: 140px;
 }
 
-/* ================== الجداول ================== */
-.table-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: var(--shadow);
+.card-3d:hover{
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 22px 45px rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.12);
 }
 
-.table-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 20px;
+.card-3d::after{
+    content:'';
+    position:absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 65%);
+    pointer-events:none;
 }
 
-.search-input {
-    padding: 9px 16px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    outline: none;
-    font-size: 13px;
-    width: 250px;
-    background: #FAF9FC;
+.card-3d .top-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:relative;
+    z-index:2;
 }
 
-.search-input:focus {
-    border-color: var(--purple);
-    background: #FFF;
+.card-3d .icon-box{
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    background:rgba(255,255,255,0.25);
+    backdrop-filter: blur(8px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
 }
 
-.filter-select {
-    padding: 9px 14px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    outline: none;
-    font-size: 13px;
-    background: #FAF9FC;
+.card-3d .click-hint{
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    opacity:0.85;
 }
 
-.custom-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13.5px;
+.card-3d .bottom-row{
+    position:relative;
+    z-index:2;
+    margin-top:16px;
 }
 
-.custom-table th {
-    background: #FAF9FC;
-    color: var(--text-muted);
-    font-weight: 800;
-    padding: 12px 14px;
-    text-align: right;
-    border-bottom: 2px solid var(--border);
+.card-3d .stat-title{
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:0.4px;
+    opacity:0.92;
+    text-transform:uppercase;
 }
 
-.custom-table td {
-    padding: 14px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
+.card-3d .stat-value{
+    font-size:28px;
+    font-weight:800;
+    margin-top:4px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.15);
 }
 
-.badge {
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 11.5px;
-    font-weight: 800;
-    display: inline-block;
+/* GRADIENTS */
+.card-grad-blue {
+    background: linear-gradient(135deg, #1A73E8 0%, #00C6FF 100%);
+    box-shadow: 0 14px 30px rgba(26,115,232,0.3);
+}
+.card-grad-indigo {
+    background: linear-gradient(135deg, #4E54C8 0%, #8F94FB 100%);
+    box-shadow: 0 14px 30px rgba(78,84,200,0.3);
+}
+.card-grad-purple {
+    background: linear-gradient(135deg, #7F00FF 0%, #E100FF 100%);
+    box-shadow: 0 14px 30px rgba(127,0,255,0.3);
+}
+.card-grad-orange {
+    background: linear-gradient(135deg, #FF512F 0%, #F09819 100%);
+    box-shadow: 0 14px 30px rgba(255,81,47,0.3);
+}
+.card-grad-emerald {
+    background: linear-gradient(135deg, #11998E 0%, #38EF7D 100%);
+    box-shadow: 0 14px 30px rgba(17,153,142,0.3);
 }
 
-.badge.success { background: #D4EDDA; color: #155724; }
-.badge.warning { background: #FFF3CD; color: #856404; }
-.badge.danger { background: #F8D7DA; color: #721C24; }
-.badge.info { background: #D1ECF1; color: #0C5460; }
-
-/* ================== النماذج والأزرار ================== */
-.btn {
-    padding: 9px 18px;
-    border-radius: 8px;
-    border: none;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+/* =========================================================
+   STANDARD CARDS & TABLES
+========================================================= */
+.card{
+    background:white;
+    border-radius:18px;
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
+    padding:26px;
+    margin-bottom:28px;
 }
 
-.btn-primary { background: var(--purple); color: #FFF; }
-.btn-primary:hover { background: var(--purple-dark); }
-.btn-success { background: var(--success); color: #FFF; }
-.btn-warning { background: var(--warning); color: #FFF; }
-.btn-danger { background: var(--danger); color: #FFF; }
-.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
-.btn-outline:hover { background: var(--purple-soft); color: var(--purple); }
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 16px;
-    text-align: right;
+.card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
 }
 
-.form-group label {
-    font-size: 12.5px;
-    font-weight: 700;
-    color: var(--text-main);
+.card-header h3{
+    font-size:18px;
+    color:var(--purple-dark);
 }
 
-.form-control {
-    padding: 10px 14px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 13px;
-    background: #FAF9FC;
-    outline: none;
+.btn{
+    padding:9px 18px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    border:none;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:.25s;
 }
 
-.form-control:focus {
-    border-color: var(--purple);
-    background: #FFF;
+.btn-primary{
+    background:var(--purple);
+    color:white;
 }
 
-/* ================== النوافذ المنبثقة Modal ================== */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 6, 22, 0.65);
-    backdrop-filter: blur(6px);
-    z-index: 1000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+.btn-primary:hover{
+    background:var(--purple-dark);
 }
 
-.modal-overlay.active { display: flex; }
-
-.modal-box {
-    background: var(--surface);
-    border-radius: 18px;
-    width: min(580px, 100%);
-    max-height: 90vh;
-    overflow-y: auto;
-    padding: 28px;
-    position: relative;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+.btn-sm{
+    padding:6px 12px;
+    font-size:11.5px;
+    border-radius:6px;
 }
 
-.modal-close {
-    position: absolute;
-    top: 18px;
-    left: 18px;
-    background: #FAF9FC;
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.btn-success{ background:#27AE60; color:white; }
+.btn-warning{ background:#F39C12; color:white; }
+.btn-danger{ background:#C0392B; color:white; }
+.btn-outline{ background:transparent; border:1px solid #DDD; color:#444; }
+
+.table-responsive{
+    overflow-x:auto;
 }
 
-/* ================== التنبيهات Toast ================== */
-.toast {
-    position: fixed;
-    bottom: 25px;
-    left: 25px;
-    background: #201826;
-    color: #FFF;
-    padding: 12px 22px;
-    border-radius: 10px;
-    font-size: 13.5px;
-    font-weight: 700;
-    z-index: 10001;
-    display: none;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+table{
+    width:100%;
+    border-collapse:collapse;
+    text-align:left;
+    font-size:13.5px;
 }
 
-/* ================== التجاوب مع الجوال ================== */
-@media(max-width: 992px) {
-    .charts-grid { grid-template-columns: 1fr; }
-    .sidebar { transform: translateX(100%); }
-    .sidebar.open { transform: translateX(0); }
-    .main-wrapper { margin-right: 0; }
-    .mobile-toggle { display: block; }
+th{
+    background:#FAF9FB;
+    color:var(--muted);
+    font-weight:700;
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+    white-space:nowrap;
+}
+
+td{
+    padding:14px 16px;
+    border-bottom:1px solid #F1EDF5;
+    vertical-align:middle;
+}
+
+tr:hover td{
+    background:#FDFBFE;
+}
+
+.status-tag{
+    display:inline-block;
+    padding:4px 10px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.status-valide{ background:#D4EDDA; color:#155724; }
+.status-en_attente{ background:#FFF3CD; color:#856404; }
+.status-refuse{ background:#F8D7DA; color:#721C24; }
+
+/* FORMS & MODALS */
+.form-group{
+    margin-bottom:16px;
+}
+
+.form-group label{
+    display:block;
+    font-size:12px;
+    font-weight:700;
+    color:var(--purple-dark);
+    margin-bottom:6px;
+}
+
+.form-group input, 
+.form-group textarea, 
+.form-group select{
+    width:100%;
+    padding:11px 14px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    font-size:13px;
+    outline:none;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus{
+    border-color:var(--purple);
+}
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(20,10,28,.65);
+    backdrop-filter:blur(6px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9000;
+    padding:20px;
+}
+
+.modal-overlay.active{ display:flex; }
+
+.modal-box{
+    background:white;
+    width:min(580px, 100%);
+    max-height:90vh;
+    overflow-y:auto;
+    border-radius:20px;
+    padding:30px;
+    position:relative;
+}
+
+.modal-close{
+    position:absolute;
+    top:18px;
+    right:18px;
+    background:#eee;
+    border:none;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    cursor:pointer;
+}
+
+/* TOASTS */
+.toast-wrap{
+    position:fixed;
+    top:20px;
+    right:20px;
+    z-index:999999;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.toast{
+    background:white;
+    padding:12px 20px;
+    border-radius:10px;
+    box-shadow:0 8px 30px rgba(0,0,0,.15);
+    font-size:13px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border-left:4px solid var(--purple);
+}
+
+@media(max-width:900px){
+    body{ flex-direction:column; }
+    .sidebar{ width:100%; height:auto; position:relative; }
+    .topbar{ padding:0 20px; }
+    .content{ padding:20px; }
 }
 </style>
 </head>
-
 <body>
 
-<!-- شاشة تسجيل دخول المسؤول الآمنة -->
-<div id="authOverlay">
-    <div class="auth-card">
-        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimZMGp5BR7hQp2daYfz6ii_IJ4wWEWk347tsUnOn42aD1hNGww9MAb17n3m9Qiwxc4-iyCYhjuPI-kQHJKLCZ2YrplFnSh5YGWTlpZ90DxQUjtwszIJXTtWRJdhz56qv3eh3QLGehQCUcZibgMvmg0UyXd0ewj3C-PY0xg_WTvoqTMcNFRRWsJ2fnTOYY/s320/1000013350.png" alt="Bella Skills Hub">
-        <h2>بوابة المسؤول الإداري</h2>
-        <p>الرجاء تسجيل الدخول بحساب له صلاحيات الإدارة للوصول إلى لوحة التحكم.</p>
+<!-- TOAST CONTAINER -->
+<div id="toastWrap" class="toast-wrap"></div>
 
-        <form id="adminLoginForm">
-            <div class="form-group">
-                <label>البريد الإلكتروني للإدارة</label>
-                <input type="email" id="adminEmailInput" class="form-control" required placeholder="admin@bellaskills.com">
-            </div>
-            <div class="form-group">
-                <label>كلمة المرور</label>
-                <input type="password" id="adminPasswordInput" class="form-control" required placeholder="••••••••">
-            </div>
-            <button type="submit" id="adminLoginBtn" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px; margin-top: 10px;">
-                تسجيل الدخول إلى النظام
-            </button>
-        </form>
-        <div style="margin-top: 15px;">
-            <a href="index.html" style="font-size: 12px; color: var(--purple); text-decoration: none; font-weight: 700;">← العودة للموقع الرئيسي</a>
+<!-- =========================================================
+     1. LOGIN GATE
+========================================================= -->
+<div id="loginGate">
+    <div class="login-card">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimZMGp5BR7hQp2daYfz6ii_IJ4wWEWk347tsUnOn42aD1hNGww9MAb17n3m9Qiwxc4-iyCYhjuPI-kQHJKLCZ2YrplFnSh5YGWTlpZ90DxQUjtwszIJXTtWRJdhz56qv3eh3QLGehQCUcZibgMvmg0UyXd0ewj3C-PY0xg_WTvoqTMcNFRRWsJ2fnTOYY/s320/1000013350.png" alt="Bella Skills">
+        <h2>Administration HUB</h2>
+        <p>Veuillez entrer le code d'accès administrateur</p>
+        <div class="form-group" style="text-align:left;">
+            <input type="password" id="adminPassInput" placeholder="Code secret (Par défaut: admin123)" autofocus>
         </div>
+        <button class="btn btn-primary" style="width:100%;padding:12px;justify-content:center;" onclick="attemptAdminLogin()">
+            Déverrouiller le Panneau
+        </button>
     </div>
 </div>
 
-<!-- القائمة الجانبية Sidebar -->
-<aside class="sidebar" id="sidebar">
+<!-- =========================================================
+     2. SIDEBAR
+========================================================= -->
+<aside class="sidebar">
     <div class="sidebar-header">
         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimZMGp5BR7hQp2daYfz6ii_IJ4wWEWk347tsUnOn42aD1hNGww9MAb17n3m9Qiwxc4-iyCYhjuPI-kQHJKLCZ2YrplFnSh5YGWTlpZ90DxQUjtwszIJXTtWRJdhz56qv3eh3QLGehQCUcZibgMvmg0UyXd0ewj3C-PY0xg_WTvoqTMcNFRRWsJ2fnTOYY/s320/1000013350.png" alt="Logo">
-        <div>
-            <h3>Bella Skills</h3>
-            <span style="font-size: 11px; color: var(--purple); font-weight: 800;">لوحة الإدارة v2.0</span>
+        <div class="brand-text">
+            BELLA SKILLS
+            <small>CONTROL PANEL</small>
         </div>
     </div>
 
-    <ul class="sidebar-nav">
-        <li class="nav-item active" onclick="switchTab('dashboard')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
-            <span>لوحة المؤشرات</span>
-        </li>
-        <li class="nav-item" onclick="switchTab('orders')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-            <span>طلبات الشراء والوصولات</span>
-        </li>
-        <li class="nav-item" onclick="switchTab('courses')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-            <span>الدورات المعروضة</span>
-        </li>
-        <li class="nav-item" onclick="switchTab('users')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-            <span>المستخدمين والطلاب</span>
-        </li>
-        <li class="nav-item" onclick="switchTab('messages')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-            <span>استمارات التواصل</span>
-        </li>
-        <li class="nav-item" onclick="switchTab('settings')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            <span>إعدادات الموقع المباشرة</span>
-        </li>
-        <li class="nav-item" onclick="switchTab('logs')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
-            <span>سجل العمليات الإدارية</span>
-        </li>
-    </ul>
+    <nav class="sidebar-nav">
+        <button class="nav-item active" id="nav_dashboard" onclick="switchTab('dashboard')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Vue d'ensemble
+        </button>
+
+        <button class="nav-item" id="nav_orders" onclick="switchTab('orders')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            Commandes & Paiements
+            <span class="badge-count" id="pendingOrdersBadge" style="display:none;">0</span>
+        </button>
+
+        <button class="nav-item" id="nav_courses" onclick="switchTab('courses')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+            Formations & E-Learning
+        </button>
+
+        <button class="nav-item" id="nav_onsite" onclick="switchTab('onsite')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 7v14M21 7v14M6 11h12M6 15h12M9 3l3 4 3-4"></path></svg>
+            Inscriptions Présentiel
+            <span class="badge-count" id="onsiteBadge" style="display:none;background:#F39C12;">0</span>
+        </button>
+
+        <button class="nav-item" id="nav_users" onclick="switchTab('users')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            Étudiants & Comptes
+        </button>
+
+        <button class="nav-item" id="nav_messages" onclick="switchTab('messages')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            Demandes de Contact & Devis
+            <span class="badge-count" id="inboxBadge" style="display:none;background:var(--purple-light);">0</span>
+        </button>
+
+        <button class="nav-item" id="nav_settings" onclick="switchTab('settings')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            Paramètres du Site
+        </button>
+    </nav>
 
     <div class="sidebar-footer">
-        <button onclick="adminLogout()" class="btn btn-outline" style="width: 100%; justify-content: center; color: var(--danger); border-color: #F8D7DA;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-            <span>تسجيل الخروج</span>
+        <button class="logout-btn" onclick="logoutAdmin()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            Verrouiller la session
         </button>
     </div>
 </aside>
 
-<!-- المحتوى الرئيسي Main Wrapper -->
-<div class="main-wrapper">
+<!-- =========================================================
+     3. MAIN VIEW
+========================================================= -->
+<main class="main">
     <header class="topbar">
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <button class="mobile-toggle" onclick="toggleSidebar()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-            </button>
-            <h2 id="pageTitle" style="font-size: 19px; color: var(--purple-dark); font-weight: 800;">لوحة المؤشرات العامة</h2>
-        </div>
-
-        <div class="user-profile">
-            <div style="text-align: left;">
-                <strong id="adminNameDisplay" style="display: block; font-size: 13.5px;">المسؤول العام</strong>
-                <span style="font-size: 11px; color: var(--success); font-weight: bold;">● متصل بالنظام</span>
+        <h1 id="topbarTitle">Vue d'ensemble</h1>
+        <div class="topbar-right">
+            <div class="live-indicator">
+                <span></span> Firebase Connecté
             </div>
-            <div class="user-avatar" id="adminAvatarDisplay">A</div>
         </div>
     </header>
 
-    <main class="content-body">
+    <div class="content">
 
-        <!-- ================== قسم 1: المؤشرات والإحصائيات ================== -->
-        <section id="tab-dashboard" class="tab-content">
-            <div class="kpi-grid">
-                <div class="kpi-card">
-                    <div class="kpi-info">
-                        <h4>إجمالي المستخدمين المسجلين</h4>
-                        <div class="kpi-num" id="kpiUsersCount">0</div>
-                    </div>
-                    <div class="kpi-icon purple">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-                    </div>
+        <!-- =========================================================
+             SECTION: 3D GRADIENT STATS CARDS (INTERACTIVE & REAL)
+        ========================================================= -->
+        <div class="stats-grid-3d">
+            <!-- 1. Visites du jour -->
+            <div class="card-3d card-grad-blue" onclick="switchTab('dashboard')">
+                <div class="top-row">
+                    <div class="icon-box">👁️</div>
+                    <span class="click-hint">Aujourd'hui ➔</span>
                 </div>
-
-                <div class="kpi-card">
-                    <div class="kpi-info">
-                        <h4>الطلبات في الانتظار</h4>
-                        <div class="kpi-num" id="kpiPendingOrders">0</div>
-                    </div>
-                    <div class="kpi-icon yellow">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    </div>
-                </div>
-
-                <div class="kpi-card">
-                    <div class="kpi-info">
-                        <h4>الإيرادات الفعلية المقبولة</h4>
-                        <div class="kpi-num" id="kpiTotalRevenue" style="color: var(--success);">0 د.ج</div>
-                    </div>
-                    <div class="kpi-icon green">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                    </div>
-                </div>
-
-                <div class="kpi-card">
-                    <div class="kpi-info">
-                        <h4>استمارات التواصل الواردة</h4>
-                        <div class="kpi-num" id="kpiMessagesCount">0</div>
-                    </div>
-                    <div class="kpi-icon blue">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                    </div>
+                <div class="bottom-row">
+                    <div class="stat-title">Visites du Jour</div>
+                    <div class="stat-value" id="statDailyVisits">0</div>
                 </div>
             </div>
 
-            <div class="charts-grid" style="margin-top: 25px;">
-                <div class="chart-card">
-                    <h3>تحليلات الزيارات اليومية الحقيقية (Real Analytics)</h3>
-                    <canvas id="visitsChart" height="130"></canvas>
+            <!-- 2. Visites mensuelles -->
+            <div class="card-3d card-grad-indigo" onclick="switchTab('dashboard')">
+                <div class="top-row">
+                    <div class="icon-box">📅</div>
+                    <span class="click-hint">Ce Mois ➔</span>
                 </div>
-                <div class="chart-card">
-                    <h3>توزيع حالات الطلبات</h3>
-                    <canvas id="ordersChart" height="130"></canvas>
+                <div class="bottom-row">
+                    <div class="stat-title">Visites Mensuelles</div>
+                    <div class="stat-value" id="statMonthlyVisits">0</div>
                 </div>
             </div>
-        </section>
 
-        <!-- ================== قسم 2: إدارة الطلبات والوصولات ================== -->
-        <section id="tab-orders" class="tab-content" style="display: none;">
-            <div class="table-card">
-                <div class="table-header">
-                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                        <input type="text" id="orderSearchInput" class="search-input" placeholder="بحث باسم العميل أو الإيميل أو الدورة...">
-                        <select id="orderStatusFilter" class="filter-select">
-                            <option value="all">جميع الحالات</option>
-                            <option value="en_attente">قيد المراجعة</option>
-                            <option value="valide">مقبول ومفعل</option>
-                            <option value="refuse">مرفوض</option>
-                        </select>
-                    </div>
-                    <button onclick="exportOrdersToCSV()" class="btn btn-outline">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        <span>تصدير CSV</span>
-                    </button>
+            <!-- 3. Formations en ligne -->
+            <div class="card-3d card-grad-purple" onclick="switchTab('courses')">
+                <div class="top-row">
+                    <div class="icon-box">💻</div>
+                    <span class="click-hint">Gérer ➔</span>
                 </div>
+                <div class="bottom-row">
+                    <div class="stat-title">Formations En Ligne</div>
+                    <div class="stat-value" id="statOnlineCourses">0</div>
+                </div>
+            </div>
 
-                <div style="overflow-x: auto;">
-                    <table class="custom-table">
+            <!-- 4. Inscriptions en Présentiel -->
+            <div class="card-3d card-grad-orange" onclick="switchTab('onsite')">
+                <div class="top-row">
+                    <div class="icon-box">🏛️</div>
+                    <span class="click-hint">Consulter ➔</span>
+                </div>
+                <div class="bottom-row">
+                    <div class="stat-title">Inscriptions Présentiel</div>
+                    <div class="stat-value" id="statOnsiteCount">0</div>
+                </div>
+            </div>
+
+            <!-- 5. Demandes de Service / Contact -->
+            <div class="card-3d card-grad-emerald" onclick="switchTab('messages')">
+                <div class="top-row">
+                    <div class="icon-box">📩</div>
+                    <span class="click-hint">Voir Messages ➔</span>
+                </div>
+                <div class="bottom-row">
+                    <div class="stat-title">Demandes de Service</div>
+                    <div class="stat-value" id="statServiceRequests">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 1: DASHBOARD STATS -->
+        <section id="tab_dashboard">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Dernières commandes nécessitant validation</h3>
+                    <button class="btn btn-primary btn-sm" onclick="switchTab('orders')">Voir toutes les commandes</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="quickOrdersTable">
                         <thead>
                             <tr>
-                                <th>تاريخ الطلب</th>
-                                <th>اسم الطالب</th>
-                                <th>البريد الإلكتروني / الهاتف</th>
-                                <th>الدورة التدريبية</th>
-                                <th>المبلغ</th>
-                                <th>الإيصال</th>
-                                <th>الحالة</th>
-                                <th>الإجراء الإداري</th>
+                                <th>Étudiant</th>
+                                <th>Formation</th>
+                                <th>Prix</th>
+                                <th>Preuve</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="ordersTableBody">
-                            <tr><td colspan="8" style="text-align: center; color: var(--text-muted);">جاري تحميل الطلبات...</td></tr>
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- ================== قسم 3: إدارة الدورات التدريبية ================== -->
-        <section id="tab-courses" class="tab-content" style="display: none;">
-            <div class="table-card">
-                <div class="table-header">
-                    <div>
-                        <h3 style="font-size: 16px; color: var(--purple-dark);">كتالوج الدورات المتاح على الموقع</h3>
-                        <p style="font-size: 12px; color: var(--text-muted);">أي تعديل أو إضافة تظهر فوراً في المتجر وبوابة الطلاب في الموقع الرئيسي.</p>
-                    </div>
-                    <button onclick="openCourseModal()" class="btn btn-primary">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                        <span>إضافة دورة جديدة</span>
-                    </button>
+        <!-- TAB 2: ORDERS & PAYMENTS -->
+        <section id="tab_orders" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Toutes les Commandes & Preuves de Paiement</h3>
                 </div>
-
-                <div style="overflow-x: auto;">
-                    <table class="custom-table">
+                <div class="table-responsive">
+                    <table id="fullOrdersTable">
                         <thead>
                             <tr>
-                                <th>الصورة</th>
-                                <th>رمز الدورة (ID)</th>
-                                <th>عنوان الدورة</th>
-                                <th>السعر المعروض</th>
-                                <th>رابط الفيديو (Iframe)</th>
-                                <th>الإجراءات</th>
+                                <th>Date</th>
+                                <th>Nom & Email</th>
+                                <th>Téléphone</th>
+                                <th>Formation</th>
+                                <th>Montant</th>
+                                <th>Reçu CCP/Baridi</th>
+                                <th>Statut Actuel</th>
+                                <th>Action Administrative</th>
                             </tr>
                         </thead>
-                        <tbody id="coursesTableBody"></tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- ================== قسم 4: إدارة المستخدمين والطلاب ================== -->
-        <section id="tab-users" class="tab-content" style="display: none;">
-            <div class="table-card">
-                <div class="table-header">
-                    <input type="text" id="userSearchInput" class="search-input" placeholder="بحث بالاسم أو البريد...">
-                    <select id="userRoleFilter" class="filter-select">
-                        <option value="all">جميع الأدوار</option>
-                        <option value="student">طلاب</option>
-                        <option value="admin">مسؤولين</option>
-                    </select>
+        <!-- TAB 3: COURSES CMS -->
+        <section id="tab_courses" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Catalogue des Formations en Ligne</h3>
+                    <button class="btn btn-primary" onclick="openCourseModal()">+ Ajouter une formation</button>
                 </div>
-
-                <div style="overflow-x: auto;">
-                    <table class="custom-table">
+                <div class="table-responsive">
+                    <table id="coursesTable">
                         <thead>
                             <tr>
-                                <th>الاسم الكامل</th>
-                                <th>البريد الإلكتروني</th>
-                                <th>رقم الهاتف</th>
-                                <th>تاريخ الانضمام</th>
-                                <th>الدور</th>
-                                <th>حالة الحساب</th>
-                                <th>الإجراء</th>
+                                <th>Aperçu</th>
+                                <th>Titre de la formation</th>
+                                <th>Prix</th>
+                                <th>URL Vidéo</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="usersTableBody"></tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- ================== قسم 5: استمارات ورسائل التواصل ================== -->
-        <section id="tab-messages" class="tab-content" style="display: none;">
-            <div class="table-card">
-                <div class="table-header">
-                    <h3 style="font-size: 16px; color: var(--purple-dark);">الرسائل والاستفسارات الواردة من نموذج الاتصال</h3>
+        <!-- TAB: ONSITE REGISTRATIONS -->
+        <section id="tab_onsite" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Inscriptions aux Formations Présentielles</h3>
                 </div>
-
-                <div style="overflow-x: auto;">
-                    <table class="custom-table">
+                <div class="table-responsive">
+                    <table id="onsiteTable">
                         <thead>
                             <tr>
-                                <th>التاريخ والوقت</th>
-                                <th>الاسم</th>
-                                <th>البريد والهاتف</th>
-                                <th>الخدمة المطلوبة</th>
-                                <th>نص الرسالة</th>
-                                <th>تواصل سريع</th>
-                                <th>حذف</th>
+                                <th>Date</th>
+                                <th>Nom & Prénom</th>
+                                <th>Téléphone</th>
+                                <th>Email</th>
+                                <th>Formation Choisie</th>
+                                <th>Statut</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="messagesTableBody"></tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- ================== قسم 6: إعدادات الموقع المباشرة ================== -->
-        <section id="tab-settings" class="tab-content" style="display: none;">
-            <div class="table-card" style="max-width: 650px;">
-                <h3 style="font-size: 18px; color: var(--purple-dark); margin-bottom: 6px;">بيانات التواصل المباشرة بالموقع</h3>
-                <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 22px;">التعديل هنا يُغير أرقام الهاتف وعناوين الواتساب تلقائياً في صفحة الموقع الرئيسية.</p>
+        <!-- TAB 4: USERS -->
+        <section id="tab_users" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Étudiants & Utilisateurs Inscrits</h3>
+                </div>
+                <div class="table-responsive">
+                    <table id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>Nom Complet</th>
+                                <th>Adresse Email</th>
+                                <th>Téléphone</th>
+                                <th>Statut Compte</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
 
-                <form id="siteSettingsForm">
+        <!-- TAB 5: MESSAGES -->
+        <section id="tab_messages" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Demandes de Contact & Devis de Service</h3>
+                </div>
+                <div class="table-responsive">
+                    <table id="messagesTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Expéditeur</th>
+                                <th>Contact</th>
+                                <th>Service Demandé</th>
+                                <th>Message</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: SETTINGS -->
+        <section id="tab_settings" style="display:none;">
+            <div class="card" style="max-width:680px;">
+                <div class="card-header">
+                    <h3>Paramètres Globaux du Site</h3>
+                </div>
+                <form id="settingsForm">
                     <div class="form-group">
-                        <label>رقم الهاتف الرسمي</label>
-                        <input type="text" id="settingPhone" class="form-control" required placeholder="+213 559 066 605">
+                        <label>Numéro de Téléphone Principal</label>
+                        <input type="text" id="settingPhone" placeholder="+213 559 066 605">
                     </div>
                     <div class="form-group">
-                        <label>رقم واتساب المباشر (مع الرمز الدولي بدون +)</label>
-                        <input type="text" id="settingWhatsapp" class="form-control" required placeholder="213559066605">
+                        <label>Numéro WhatsApp (avec indicatif)</label>
+                        <input type="text" id="settingWhatsapp" placeholder="+213 559 066 605">
                     </div>
                     <div class="form-group">
-                        <label>العنوان الجغرافي المعروض</label>
-                        <input type="text" id="settingLocation" class="form-control" required placeholder="Mohammadia — Alger, Algérie">
+                        <label>Localisation affichée</label>
+                        <input type="text" id="settingLocation" placeholder="Mohammadia — Alger, Algérie">
                     </div>
-                    <button type="submit" id="saveSettingsBtn" class="btn btn-primary" style="margin-top: 10px;">
-                        حفظ الإعدادات فورياً في الموقع
-                    </button>
+                    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
                 </form>
             </div>
         </section>
 
-        <!-- ================== قسم 7: سجل العمليات الإدارية ================== -->
-        <section id="tab-logs" class="tab-content" style="display: none;">
-            <div class="table-card">
-                <div class="table-header">
-                    <h3 style="font-size: 16px; color: var(--purple-dark);">سجل الأحداث والعمليات الإدارية (Audit Trail)</h3>
-                </div>
-
-                <div style="overflow-x: auto;">
-                    <table class="custom-table">
-                        <thead>
-                            <tr>
-                                <th>التوقيت</th>
-                                <th>المنفذ</th>
-                                <th>نوع العملية</th>
-                                <th>التفاصيل والملاحظات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="logsTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-    </main>
-</div>
-
-<!-- ================== نافذة معاينة إيصال الدفع ================== -->
-<div class="modal-overlay" id="receiptModal">
-    <div class="modal-box" style="text-align: center;">
-        <button class="modal-close" onclick="closeModal('receiptModal')">✕</button>
-        <h3 style="margin-bottom: 15px; color: var(--purple-dark);">إيصال الدفع البنكي / BaridiMob</h3>
-        <div id="receiptContainer" style="max-height: 480px; overflow: auto; border: 1px solid var(--border); border-radius: 12px; padding: 10px; background: #FAF9FC;">
-            <!-- الصورة أو الـ PDF يُعرض هنا -->
-        </div>
-        <div style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
-            <button id="modalApproveBtn" class="btn btn-success">قبول الطلب وتفعيل الكورس</button>
-            <button id="modalRejectBtn" class="btn btn-danger">رفض الإيصال</button>
-        </div>
     </div>
-</div>
+</main>
 
-<!-- ================== نافذة إضافة وتعديل دورة ================== -->
+<!-- =========================================================
+     MODAL: COURSE (ADD / EDIT)
+========================================================= -->
 <div class="modal-overlay" id="courseModal">
     <div class="modal-box">
-        <button class="modal-close" onclick="closeModal('courseModal')">✕</button>
-        <h3 id="courseModalTitle" style="margin-bottom: 15px; color: var(--purple-dark);">إضافة دورة تدريبية</h3>
-        
+        <button class="modal-close" onclick="closeCourseModal()">✕</button>
+        <h3 id="courseModalTitle" style="color:var(--purple-dark);margin-bottom:18px;">Ajouter une formation</h3>
         <form id="courseForm">
-            <input type="hidden" id="courseEditId">
+            <input type="hidden" id="courseIdField">
             <div class="form-group">
-                <label>معرف الدورة (ID فريد بالإنجليزية بدون مسافات، مثال: c4)</label>
-                <input type="text" id="courseIdInput" class="form-control" required placeholder="c4">
+                <label>Titre de la Formation</label>
+                <input type="text" id="courseTitleField" required placeholder="ex: Formation Complète Soft Skills">
             </div>
             <div class="form-group">
-                <label>عنوان الدورة التدريبية</label>
-                <input type="text" id="courseTitleInput" class="form-control" required placeholder="عنوان الدورة">
+                <label>Prix (en DZD)</label>
+                <input type="text" id="coursePriceField" required placeholder="ex: 12 000 DZD">
             </div>
             <div class="form-group">
-                <label>السعر (مثال: 18 000 DZD)</label>
-                <input type="text" id="coursePriceInput" class="form-control" required placeholder="18 000 DZD">
+                <label>URL de l'image de couverture</label>
+                <input type="url" id="courseImageField" required placeholder="https://images.unsplash.com/...">
             </div>
             <div class="form-group">
-                <label>رابط صورة الغلاف (URL)</label>
-                <input type="url" id="courseImageInput" class="form-control" required placeholder="https://images.unsplash.com/...">
+                <label>URL Vidéo YouTube Embed (Accessible après achat)</label>
+                <input type="url" id="courseVideoField" required placeholder="https://www.youtube.com/embed/...">
             </div>
             <div class="form-group">
-                <label>رابط فيديو الدورة (Embed URL)</label>
-                <input type="url" id="courseVideoInput" class="form-control" required placeholder="https://www.youtube.com/embed/...">
+                <label>Description du cours</label>
+                <textarea id="courseDescField" rows="3" required placeholder="Description détaillée du programme..."></textarea>
             </div>
-            <div class="form-group">
-                <label>وصف الدورة</label>
-                <textarea id="courseDescInput" class="form-control" rows="3" required placeholder="تفاصيل الدورة وما سيتعلمه الطالب..."></textarea>
-            </div>
-            <button type="submit" id="saveCourseBtn" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                حفظ الدورة في الكتالوج
-            </button>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Enregistrer la formation</button>
         </form>
     </div>
 </div>
 
-<!-- إشعار Toast عام -->
-<div id="toastBox" class="toast"></div>
+<!-- =========================================================
+     MODAL: RECEIPT PROOF PREVIEW
+========================================================= -->
+<div class="modal-overlay" id="receiptModal">
+    <div class="modal-box" style="text-align:center;width:min(680px,100%);">
+        <button class="modal-close" onclick="closeReceiptModal()">✕</button>
+        <h3 style="color:var(--purple-dark);margin-bottom:14px;">Reçu de Paiement</h3>
+        <div id="receiptPreviewWrap" style="max-height:70vh;overflow-y:auto;margin-bottom:15px;background:#eee;padding:10px;border-radius:10px;"></div>
+        <a id="receiptDownloadLink" href="#" target="_blank" class="btn btn-primary btn-sm">Ouvrir en plein écran / Télécharger</a>
+    </div>
+</div>
 
 <!-- =========================================================
-     منطق لوحة الإدارة وبرمجة Firebase الحقيقية
+     FIREBASE LOGIC & SCRIPTS
 ========================================================= -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
-import { getDatabase, ref, set, get, onValue, update, remove, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, set, get, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// نفس إعدادات المشروع الحقيقية المربوطة بالموقع الرئيسي
+// NOUVELLE CONFIGURATION FIREBASE FOURNIE
 const firebaseConfig = {
   apiKey: "AIzaSyA1xTHV828178vImPGLFQhr1DS4k9ME28s",
   authDomain: "bellaskills-8edbb.firebaseapp.com",
@@ -896,663 +985,438 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getDatabase(app, firebaseConfig.databaseURL);
 
-function emailToKey(e){ return e.toLowerCase().trim().replace(/[^a-z0-9]/g, "_"); }
+/* Auth Protection */
+const ADMIN_PASS = "admin123";
 
-// الحالة المحلية للوحة الإدارة
-let currentAdmin = JSON.parse(sessionStorage.getItem("bs_admin_session") || "null");
-let allOrders = {};
-let allUsers = {};
-let allCourses = {};
-let allMessages = {};
-let visitsChartInstance = null;
-let ordersChartInstance = null;
-
-// ======================= 1. نظام تسجيل دخول المسؤول والتحقق =======================
-function checkAuth() {
-    if(currentAdmin && currentAdmin.role === "admin") {
-        document.getElementById("authOverlay").style.display = "none";
-        document.getElementById("adminNameDisplay").textContent = currentAdmin.name || currentAdmin.email;
-        document.getElementById("adminAvatarDisplay").textContent = (currentAdmin.name || "A").charAt(0).toUpperCase();
-        initDashboard();
+window.attemptAdminLogin = function(){
+    const input = document.getElementById("adminPassInput").value.trim();
+    if(input === ADMIN_PASS){
+        sessionStorage.setItem("bs_admin_auth", "true");
+        document.getElementById("loginGate").style.display = "none";
+        showToast("Session ouverte avec succès", "success");
     } else {
-        document.getElementById("authOverlay").style.display = "flex";
+        showToast("Code d'accès incorrect", "danger");
     }
+};
+
+window.logoutAdmin = function(){
+    sessionStorage.removeItem("bs_admin_auth");
+    location.reload();
+};
+
+if(sessionStorage.getItem("bs_admin_auth") === "true"){
+    document.getElementById("loginGate").style.display = "none";
 }
 
-document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById("adminLoginBtn");
-    btn.disabled = true;
-    btn.textContent = "جاري التحقق من الصلاحيات...";
+/* Toast */
+window.showToast = function(msg, type="info"){
+    const wrap = document.getElementById("toastWrap");
+    const t = document.createElement("div");
+    t.className = "toast";
+    if(type === "success") t.style.borderLeftColor = "#27AE60";
+    if(type === "danger") t.style.borderLeftColor = "#C0392B";
+    t.textContent = msg;
+    wrap.appendChild(t);
+    setTimeout(() => { t.remove(); }, 3500);
+};
 
-    const email = document.getElementById("adminEmailInput").value.trim().toLowerCase();
-    const pass = document.getElementById("adminPasswordInput").value.trim();
-    const userKey = emailToKey(email);
+/* Tabs Switcher */
+window.switchTab = function(tabName){
+    document.querySelectorAll(".sidebar-nav .nav-item").forEach(btn => btn.classList.remove("active"));
+    const activeNavBtn = document.getElementById(`nav_${tabName}`);
+    if(activeNavBtn) activeNavBtn.classList.add("active");
 
-    try {
-        const userRef = ref(db, `users/${userKey}`);
-        const snap = await get(userRef);
+    const titles = {
+        dashboard: "Vue d'ensemble",
+        orders: "Commandes & Validation des Paiements",
+        courses: "Gestion des Formations En Ligne",
+        onsite: "Inscriptions aux Formations Présentielles",
+        users: "Gestion des Utilisateurs",
+        messages: "Demandes de Contact & Devis",
+        settings: "Paramètres Globaux"
+    };
 
-        if(snap.exists()) {
-            const userData = snap.val();
-            if(userData.password === pass) {
-                if(userData.blocked) {
-                    showToast("هذا الحساب موقوف من قبل الإدارة العليا!");
-                    btn.disabled = false;
-                    btn.textContent = "تسجيل الدخول إلى النظام";
-                    return;
-                }
+    document.getElementById("topbarTitle").textContent = titles[tabName] || "Administration";
+    ['dashboard', 'orders', 'courses', 'onsite', 'users', 'messages', 'settings'].forEach(t => {
+        const el = document.getElementById(`tab_${t}`);
+        if(el) el.style.display = (t === tabName) ? "block" : "none";
+    });
 
-                if(userData.role === "admin") {
-                    currentAdmin = userData;
-                    sessionStorage.setItem("bs_admin_session", JSON.stringify(userData));
-                    logAction("تسجيل دخول", `قام المسؤول ${userData.name} بالدخول إلى لوحة التحكم`);
-                    showToast("مرحباً بك في لوحة الإدارة");
-                    checkAuth();
-                } else {
-                    showToast("عذراً، هذا الحساب ليس لديه صلاحيات الإدارة (Role != admin)!");
-                }
-            } else {
-                showToast("كلمة المرور غير صحيحة!");
-            }
-        } else {
-            // التحقق من حساب المدير الافتراضي إن لم يكن مسجلاً بعد
-            if(email === "admin@bellaskills.com" && pass === "admin123") {
-                const defaultAdmin = {
-                    name: "المسؤول العام",
-                    email: "admin@bellaskills.com",
-                    password: "admin123",
-                    role: "admin",
-                    blocked: false,
-                    createdAt: Date.now()
-                };
-                await set(userRef, defaultAdmin);
-                currentAdmin = defaultAdmin;
-                sessionStorage.setItem("bs_admin_session", JSON.stringify(defaultAdmin));
-                showToast("تم إنشاء وتفعيل حساب الأدمن الرئيسي لأول مرة بنجاح!");
-                checkAuth();
-            } else {
-                showToast("الحساب غير موجود في قاعدة البيانات!");
-            }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+/* =========================================================
+   1. REAL-TIME ORDERS LISTENER
+========================================================= */
+let globalOrders = {};
+
+onValue(ref(db, "orders"), (snap) => {
+    globalOrders = snap.val() || {};
+    const ordersArray = Object.values(globalOrders);
+
+    let pendingCount = 0;
+    const quickTbody = document.querySelector("#quickOrdersTable tbody");
+    const fullTbody = document.querySelector("#fullOrdersTable tbody");
+    quickTbody.innerHTML = "";
+    fullTbody.innerHTML = "";
+
+    ordersArray.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+    ordersArray.forEach(o => {
+        if(o.status === "en_attente"){
+            pendingCount++;
         }
-    } catch(err) {
-        showToast("حدث خطأ في الاتصال بقاعدة البيانات: " + err.message);
-    } finally {
-        btn.disabled = false;
-        btn.textContent = "تسجيل الدخول إلى النظام";
+
+        // Dashboard quick row
+        if(o.status === "en_attente"){
+            const qRow = document.createElement("tr");
+            qRow.innerHTML = `
+                <td><strong>${o.userName || o.userEmail}</strong></td>
+                <td>${o.courseTitle || '-'}</td>
+                <td><strong style="color:var(--success);">${o.coursePrice || '-'}</strong></td>
+                <td>
+                    ${o.proofImage ? `<button class="btn btn-outline btn-sm" onclick="viewReceipt('${o.orderId}')">Voir reçu</button>` : 'Aucun'}
+                </td>
+                <td><span class="status-tag status-${o.status}">En attente</span></td>
+                <td>
+                    <button class="btn btn-success btn-sm" onclick="setOrderStatus('${o.orderId}', 'valide')">Valider</button>
+                    <button class="btn btn-danger btn-sm" onclick="setOrderStatus('${o.orderId}', 'refuse')">Refuser</button>
+                </td>
+            `;
+            quickTbody.appendChild(qRow);
+        }
+
+        // Full orders row
+        const fRow = document.createElement("tr");
+        const dateStr = o.createdAt ? new Date(o.createdAt).toLocaleDateString('fr-FR') : '-';
+        fRow.innerHTML = `
+            <td>${dateStr}</td>
+            <td><strong>${o.userName || '-'}</strong><br><small style="color:var(--muted);">${o.userEmail || '-'}</small></td>
+            <td>${o.userPhone || '-'}</td>
+            <td>${o.courseTitle || '-'}</td>
+            <td><strong>${o.coursePrice || '-'}</strong></td>
+            <td>
+                ${o.proofImage ? `<button class="btn btn-outline btn-sm" onclick="viewReceipt('${o.orderId}')">🔎 Examiner</button>` : 'Aucun'}
+            </td>
+            <td><span class="status-tag status-${o.status}">${o.status === 'valide' ? 'Validé' : o.status === 'refuse' ? 'Refusé' : 'En attente'}</span></td>
+            <td>
+                <button class="btn btn-success btn-sm" title="Valider" onclick="setOrderStatus('${o.orderId}', 'valide')">✓</button>
+                <button class="btn btn-warning btn-sm" title="En attente" onclick="setOrderStatus('${o.orderId}', 'en_attente')">⏳</button>
+                <button class="btn btn-danger btn-sm" title="Refuser" onclick="setOrderStatus('${o.orderId}', 'refuse')">✕</button>
+                <button class="btn btn-outline btn-sm" style="color:red;" title="Supprimer" onclick="deleteOrder('${o.orderId}')">🗑</button>
+            </td>
+        `;
+        fullTbody.appendChild(fRow);
+    });
+
+    const pBadge = document.getElementById("pendingOrdersBadge");
+    if(pendingCount > 0){
+        pBadge.style.display = "inline-block";
+        pBadge.textContent = pendingCount;
+    } else {
+        pBadge.style.display = "none";
     }
 });
 
-window.adminLogout = function() {
-    logAction("تسجيل خروج", `تسجيل خروج المسؤول ${currentAdmin?.name}`);
-    sessionStorage.removeItem("bs_admin_session");
-    currentAdmin = null;
-    checkAuth();
+window.setOrderStatus = function(orderId, status){
+    update(ref(db, `orders/${orderId}`), {
+        status: status,
+        updatedAt: Date.now()
+    }).then(() => {
+        showToast("Statut mis à jour avec succès !", "success");
+    });
 };
 
-// ======================= 2. تحميل البيانات والمزامنة الفورية =======================
-function initDashboard() {
-    loadRealtimeKPIsAndData();
-    loadSiteSettings();
-    loadAnalyticsChart();
-    loadAuditLogs();
-}
-
-function loadRealtimeKPIsAndData() {
-    // مزامنة المستخدمين
-    onValue(ref(db, "users"), (snap) => {
-        allUsers = snap.val() || {};
-        const usersList = Object.values(allUsers);
-        document.getElementById("kpiUsersCount").textContent = usersList.length;
-        renderUsersTable(usersList);
-    });
-
-    // مزامنة الطلبات
-    onValue(ref(db, "orders"), (snap) => {
-        allOrders = snap.val() || {};
-        const ordersList = Object.values(allOrders);
-        
-        let pending = 0, valid = 0, refused = 0;
-        let revenue = 0;
-
-        ordersList.forEach(o => {
-            if(o.status === "valide") {
-                valid++;
-                // استخراج القيمة العددية من السعر "12 000 DZD"
-                const priceNum = parseInt(String(o.coursePrice).replace(/[^0-9]/g, "")) || 0;
-                revenue += priceNum;
-            } else if(o.status === "refuse") {
-                refused++;
-            } else {
-                pending++;
-            }
+window.deleteOrder = function(orderId){
+    if(confirm("Voulez-vous supprimer définitivement cette commande ?")){
+        remove(ref(db, `orders/${orderId}`)).then(() => {
+            showToast("Commande supprimée", "danger");
         });
-
-        document.getElementById("kpiPendingOrders").textContent = pending;
-        document.getElementById("kpiTotalRevenue").textContent = revenue.toLocaleString('fr-FR') + " د.ج";
-
-        renderOrdersTable(ordersList);
-        updateOrdersChart(pending, valid, refused);
-    });
-
-    // مزامنة الدورات التدريبية
-    onValue(ref(db, "online_courses"), (snap) => {
-        allCourses = snap.val() || {};
-        renderCoursesTable(allCourses);
-    });
-
-    // مزامنة استمارات ورسائل التواصل
-    onValue(ref(db, "contacts_submissions"), (snap) => {
-        allMessages = snap.val() || {};
-        const msgList = Object.entries(allMessages).map(([id, val]) => ({ id, ...val }));
-        document.getElementById("kpiMessagesCount").textContent = msgList.length;
-        renderMessagesTable(msgList);
-    });
-}
-
-// ======================= 3. جداول الطلبات والمدفوعات =======================
-function renderOrdersTable(orders) {
-    const tbody = document.getElementById("ordersTableBody");
-    const search = document.getElementById("orderSearchInput").value.toLowerCase();
-    const filter = document.getElementById("orderStatusFilter").value;
-
-    const filtered = orders.filter(o => {
-        const matchSearch = (o.userName || "").toLowerCase().includes(search) || 
-                            (o.userEmail || "").toLowerCase().includes(search) || 
-                            (o.courseTitle || "").toLowerCase().includes(search);
-        const matchFilter = filter === "all" ? true : o.status === filter;
-        return matchSearch && matchFilter;
-    });
-
-    if(filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 25px;">لا توجد طلبات مطابقة.</td></tr>`;
-        return;
-    }
-
-    tbody.innerHTML = filtered.map(o => {
-        let badge = `<span class="badge warning">قيد المراجعة</span>`;
-        if(o.status === "valide") badge = `<span class="badge success">مقبول ومفعل</span>`;
-        if(o.status === "refuse") badge = `<span class="badge danger">مرفوض</span>`;
-
-        const dateStr = o.createdAt ? new Date(o.createdAt).toLocaleDateString('ar-DZ') : "-";
-
-        return `
-            <tr>
-                <td><small style="color:var(--text-muted);">${dateStr}</small></td>
-                <td><strong>${o.userName || 'طالب'}</strong></td>
-                <td>${o.userEmail}<br><small style="color:var(--text-muted);">${o.userPhone || ''}</small></td>
-                <td><span style="color:var(--purple-dark); font-weight:700;">${o.courseTitle}</span></td>
-                <td><strong style="color:var(--success);">${o.coursePrice}</strong></td>
-                <td>
-                    ${o.proofImage ? `
-                        <button onclick="viewReceipt('${o.orderId}')" class="btn btn-outline" style="padding:4px 8px; font-size:11.5px;">
-                            عرض الوصل 🔍
-                        </button>
-                    ` : '<span style="color:var(--text-muted);">لا يوجد وصل</span>'}
-                </td>
-                <td>${badge}</td>
-                <td>
-                    <div style="display:flex; gap:6px;">
-                        <button onclick="setOrderStatus('${o.orderId}', 'valide')" class="btn btn-success" style="padding:4px 8px; font-size:11.5px;" title="قبول">✓</button>
-                        <button onclick="setOrderStatus('${o.orderId}', 'refuse')" class="btn btn-danger" style="padding:4px 8px; font-size:11.5px;" title="رفض">✕</button>
-                        <button onclick="deleteOrder('${o.orderId}')" class="btn btn-outline" style="padding:4px 8px; font-size:11.5px; color:var(--danger);" title="حذف">🗑</button>
-                    </div>
-                </td>
-            </tr>
-        `;
-    }).join("");
-}
-
-window.setOrderStatus = async function(orderId, status) {
-    if(!confirm(`هل أنت متأكد من تغيير حالة هذا الطلب إلى: ${status === 'valide' ? 'مقبول' : 'مرفوض'}؟`)) return;
-    try {
-        await update(ref(db, `orders/${orderId}`), {
-            status: status,
-            updatedAt: Date.now()
-        });
-        logAction("تحديث طلب", `تغيير حالة الطلب ${orderId} إلى ${status}`);
-        showToast("تم تحديث حالة الطلب بنجاح");
-        closeModal("receiptModal");
-    } catch(err) {
-        showToast("خطأ أثناء تحديث الطلب: " + err.message);
     }
 };
 
-window.deleteOrder = async function(orderId) {
-    if(!confirm("تحذير: هل أنت متأكد من حذف هذا الطلب نهائياً من قاعدة البيانات؟")) return;
-    try {
-        await remove(ref(db, `orders/${orderId}`));
-        logAction("حذف طلب", `تم حذف الطلب ${orderId} نهائياً`);
-        showToast("تم حذف الطلب بنجاح");
-    } catch(err) {
-        showToast("خطأ أثناء الحذف: " + err.message);
-    }
-};
-
-window.viewReceipt = function(orderId) {
-    const order = allOrders[orderId];
+window.viewReceipt = function(orderId){
+    const order = globalOrders[orderId];
     if(!order || !order.proofImage) return;
 
-    const container = document.getElementById("receiptContainer");
-    if(order.proofImage.startsWith("data:application/pdf")) {
-        container.innerHTML = `<embed src="${order.proofImage}" type="application/pdf" width="100%" height="450px" />`;
+    const wrap = document.getElementById("receiptPreviewWrap");
+    const link = document.getElementById("receiptDownloadLink");
+    link.href = order.proofImage;
+
+    if(order.proofImage.startsWith("data:application/pdf") || order.proofImage.includes(".pdf")){
+        wrap.innerHTML = `<iframe src="${order.proofImage}" style="width:100%;height:450px;border:none;"></iframe>`;
     } else {
-        container.innerHTML = `<img src="${order.proofImage}" style="max-width:100%; border-radius:8px; display:block; margin:auto;" alt="Receipt">`;
+        wrap.innerHTML = `<img src="${order.proofImage}" style="max-width:100%;border-radius:8px;">`;
     }
 
-    document.getElementById("modalApproveBtn").onclick = () => setOrderStatus(orderId, 'valide');
-    document.getElementById("modalRejectBtn").onclick = () => setOrderStatus(orderId, 'refuse');
-    openModal("receiptModal");
+    document.getElementById("receiptModal").classList.add("active");
 };
 
-// ======================= 4. إدارة الدورات والكتالوج =======================
-function renderCoursesTable(courses) {
-    const tbody = document.getElementById("coursesTableBody");
-    const list = Object.values(courses);
+window.closeReceiptModal = () => document.getElementById("receiptModal").classList.remove("active");
 
-    if(list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">لا توجد دورات مضافة حالياً.</td></tr>`;
-        return;
-    }
+/* =========================================================
+   2. REAL-TIME COURSES CRUD & STATS
+========================================================= */
+let globalCourses = {};
 
-    tbody.innerHTML = list.map(c => `
-        <tr>
-            <td><img src="${c.image}" style="width:50px; height:35px; object-fit:cover; border-radius:6px;" alt=""></td>
-            <td><code>${c.id}</code></td>
-            <td><strong>${c.title}</strong></td>
-            <td><span style="color:var(--success); font-weight:700;">${c.price}</span></td>
-            <td><a href="${c.videoUrl}" target="_blank" style="color:var(--purple); font-size:12px;">رابط الفيديو 🔗</a></td>
+onValue(ref(db, "online_courses"), (snap) => {
+    globalCourses = snap.val() || {};
+    const coursesArray = Object.values(globalCourses);
+    
+    // Mise à jour de la boîte 3D: Formations En Ligne
+    document.getElementById("statOnlineCourses").textContent = coursesArray.length;
+
+    const tbody = document.querySelector("#coursesTable tbody");
+    tbody.innerHTML = "";
+
+    coursesArray.forEach(c => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td><img src="${c.image}" style="width:50px;height:50px;border-radius:8px;object-fit:cover;"></td>
+            <td><strong>${c.title}</strong><br><small style="color:var(--muted);">${(c.description || '').substring(0,60)}...</small></td>
+            <td><strong>${c.price}</strong></td>
+            <td><a href="${c.videoUrl}" target="_blank" style="color:var(--purple);font-size:12px;">Lien Vidéo</a></td>
             <td>
-                <div style="display:flex; gap:6px;">
-                    <button onclick="editCourse('${c.id}')" class="btn btn-outline" style="padding:4px 8px; font-size:12px;">تعديل</button>
-                    <button onclick="deleteCourse('${c.id}')" class="btn btn-outline" style="padding:4px 8px; font-size:12px; color:var(--danger);">حذف</button>
-                </div>
+                <button class="btn btn-outline btn-sm" onclick="editCourse('${c.id}')">✏️ Modifier</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteCourse('${c.id}')">🗑 Supprimer</button>
             </td>
-        </tr>
-    `).join("");
-}
+        `;
+        tbody.appendChild(tr);
+    });
+});
 
-window.openCourseModal = function() {
-    document.getElementById("courseForm").reset();
-    document.getElementById("courseEditId").value = "";
-    document.getElementById("courseIdInput").disabled = false;
-    document.getElementById("courseModalTitle").textContent = "إضافة دورة جديدة";
-    openModal("courseModal");
+window.openCourseModal = function(courseId = null){
+    const modal = document.getElementById("courseModal");
+    const form = document.getElementById("courseForm");
+    form.reset();
+
+    if(courseId && globalCourses[courseId]){
+        const c = globalCourses[courseId];
+        document.getElementById("courseModalTitle").textContent = "Modifier la formation";
+        document.getElementById("courseIdField").value = c.id;
+        document.getElementById("courseTitleField").value = c.title;
+        document.getElementById("coursePriceField").value = c.price;
+        document.getElementById("courseImageField").value = c.image;
+        document.getElementById("courseVideoField").value = c.videoUrl;
+        document.getElementById("courseDescField").value = c.description;
+    } else {
+        document.getElementById("courseModalTitle").textContent = "Ajouter une formation";
+        document.getElementById("courseIdField").value = "c_" + Date.now();
+    }
+
+    modal.classList.add("active");
 };
 
-window.editCourse = function(courseId) {
-    const c = allCourses[courseId];
-    if(!c) return;
+window.closeCourseModal = () => document.getElementById("courseModal").classList.remove("active");
 
-    document.getElementById("courseEditId").value = c.id;
-    document.getElementById("courseIdInput").value = c.id;
-    document.getElementById("courseIdInput").disabled = true; // منع تغيير المعرف أثناء التعديل
-    document.getElementById("courseTitleInput").value = c.title;
-    document.getElementById("coursePriceInput").value = c.price;
-    document.getElementById("courseImageInput").value = c.image;
-    document.getElementById("courseVideoInput").value = c.videoUrl;
-    document.getElementById("courseDescInput").value = c.description;
-
-    document.getElementById("courseModalTitle").textContent = "تعديل الدورة: " + c.title;
-    openModal("courseModal");
-};
-
-document.getElementById("courseForm").addEventListener("submit", async (e) => {
+document.getElementById("courseForm").addEventListener("submit", (e) => {
     e.preventDefault();
-    const btn = document.getElementById("saveCourseBtn");
-    btn.disabled = true;
-    btn.textContent = "جاري الحفظ في الكتالوج...";
-
-    const id = document.getElementById("courseIdInput").value.trim();
-    const coursePayload = {
+    const id = document.getElementById("courseIdField").value;
+    const courseData = {
         id: id,
-        title: document.getElementById("courseTitleInput").value.trim(),
-        price: document.getElementById("coursePriceInput").value.trim(),
-        image: document.getElementById("courseImageInput").value.trim(),
-        videoUrl: document.getElementById("courseVideoInput").value.trim(),
-        description: document.getElementById("courseDescInput").value.trim(),
+        title: document.getElementById("courseTitleField").value.trim(),
+        price: document.getElementById("coursePriceField").value.trim(),
+        image: document.getElementById("courseImageField").value.trim(),
+        videoUrl: document.getElementById("courseVideoField").value.trim(),
+        description: document.getElementById("courseDescField").value.trim(),
         updatedAt: Date.now()
     };
 
-    try {
-        await set(ref(db, `online_courses/${id}`), coursePayload);
-        logAction("تعديل كتالوج", `تم حفظ الدورة التدريبية: ${coursePayload.title} (${id})`);
-        showToast("تم حفظ الدورة بنجاح في الموقع الرئيسي!");
-        closeModal("courseModal");
-    } catch(err) {
-        showToast("خطأ أثناء حفظ الدورة: " + err.message);
-    } finally {
-        btn.disabled = false;
-        btn.textContent = "حفظ الدورة في الكتالوج";
+    set(ref(db, `online_courses/${id}`), courseData).then(() => {
+        closeCourseModal();
+        showToast("Formation enregistrée avec succès !", "success");
+    });
+});
+
+window.editCourse = (id) => openCourseModal(id);
+
+window.deleteCourse = function(courseId){
+    if(confirm("Confirmez-vous la suppression de ce cours ?")){
+        remove(ref(db, `online_courses/${courseId}`)).then(() => {
+            showToast("Formation supprimée", "danger");
+        });
+    }
+};
+
+/* =========================================================
+   3. REAL-TIME ONSITE REGISTRATIONS (تسجيل حظوري)
+========================================================= */
+onValue(ref(db, "onsite_registrations"), (snap) => {
+    const list = snap.val() || {};
+    const entries = Object.entries(list).reverse();
+    
+    // Mise à jour de la boîte 3D: Inscriptions Présentiel
+    document.getElementById("statOnsiteCount").textContent = entries.length;
+
+    const onsiteBadge = document.getElementById("onsiteBadge");
+    if(entries.length > 0){
+        onsiteBadge.style.display = "inline-block";
+        onsiteBadge.textContent = entries.length;
+    } else {
+        onsiteBadge.style.display = "none";
+    }
+
+    const tbody = document.querySelector("#onsiteTable tbody");
+    tbody.innerHTML = "";
+
+    entries.forEach(([key, reg]) => {
+        const tr = document.createElement("tr");
+        const dateStr = reg.timestamp ? new Date(reg.timestamp).toLocaleDateString('fr-FR') : '-';
+        tr.innerHTML = `
+            <td>${dateStr}</td>
+            <td><strong>${reg.name || '-'}</strong></td>
+            <td>${reg.phone || '-'}</td>
+            <td>${reg.email || '-'}</td>
+            <td><strong style="color:var(--purple);">${reg.courseName || reg.training || 'Formation Présentielle'}</strong></td>
+            <td><span class="status-tag status-valide">${reg.status || 'Confirmé'}</span></td>
+            <td>
+                <button class="btn btn-outline btn-sm" style="color:red;" onclick="deleteOnsiteReg('${key}')">Supprimer</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+});
+
+window.deleteOnsiteReg = function(key){
+    if(confirm("Supprimer cette inscription ?")){
+        remove(ref(db, `onsite_registrations/${key}`)).then(() => {
+            showToast("Inscription supprimée", "info");
+        });
+    }
+};
+
+/* =========================================================
+   4. CONTACTS & DEMANDES DE SERVICES (طلب خدمة)
+========================================================= */
+onValue(ref(db, "contacts_submissions"), (snap) => {
+    const messages = snap.val() || {};
+    const list = Object.entries(messages).reverse();
+
+    // Mise à jour de la boîte 3D: Demandes de Service
+    document.getElementById("statServiceRequests").textContent = list.length;
+
+    const inboxBadge = document.getElementById("inboxBadge");
+    if(list.length > 0){
+        inboxBadge.style.display = "inline-block";
+        inboxBadge.textContent = list.length;
+    } else {
+        inboxBadge.style.display = "none";
+    }
+
+    const tbody = document.querySelector("#messagesTable tbody");
+    tbody.innerHTML = "";
+
+    list.forEach(([key, m]) => {
+        const tr = document.createElement("tr");
+        const d = m.timestamp ? new Date(m.timestamp).toLocaleDateString('fr-FR') : '-';
+        tr.innerHTML = `
+            <td>${d}</td>
+            <td><strong>${m.name || '-'}</strong></td>
+            <td>${m.email || ''}<br><small>${m.phone || ''}</small></td>
+            <td><span class="status-tag status-en_attente">${m.service || 'Demande de Service'}</span></td>
+            <td style="max-width:280px;white-space:pre-wrap;">${m.message || '-'}</td>
+            <td>
+                <button class="btn btn-outline btn-sm" style="color:red;" onclick="deleteMessage('${key}')">Supprimer</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+});
+
+window.deleteMessage = function(key){
+    if(confirm("Supprimer ce message ?")){
+        remove(ref(db, `contacts_submissions/${key}`)).then(() => {
+            showToast("Message supprimé", "info");
+        });
+    }
+};
+
+/* =========================================================
+   5. REAL VISITOR ANALYTICS (JOURNALIER ET MENSUEL)
+========================================================= */
+const todayKey = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+const currentMonthPrefix = todayKey.substring(0, 7);     // YYYY-MM
+
+onValue(ref(db, "analytics/daily_visits"), (snap) => {
+    const visits = snap.val() || {};
+    
+    // 1. Visites du jour réelles
+    const todayVisits = visits[todayKey] || 0;
+    document.getElementById("statDailyVisits").textContent = todayVisits;
+
+    // 2. Visites du mois réelles
+    let monthlyVisits = 0;
+    Object.keys(visits).forEach(date => {
+        if(date.startsWith(currentMonthPrefix)){
+            monthlyVisits += Number(visits[date]) || 0;
+        }
+    });
+    document.getElementById("statMonthlyVisits").textContent = monthlyVisits;
+});
+
+/* =========================================================
+   6. USERS MANAGEMENT
+========================================================= */
+onValue(ref(db, "users"), (snap) => {
+    const users = snap.val() || {};
+    const tbody = document.querySelector("#usersTable tbody");
+    tbody.innerHTML = "";
+    const usersArray = Object.values(users);
+
+    usersArray.forEach(u => {
+        const tr = document.createElement("tr");
+        const isBlocked = u.blocked === true;
+        const safeKey = (u.email || "").toLowerCase().trim().replace(/[^a-z0-9]/g, "_");
+        tr.innerHTML = `
+            <td><strong>${u.name || '-'}</strong></td>
+            <td>${u.email || '-'}</td>
+            <td>${u.phone || '-'}</td>
+            <td>
+                <span class="status-tag ${isBlocked ? 'status-refuse' : 'status-valide'}">
+                    ${isBlocked ? 'Compte Bloqué' : 'Actif'}
+                </span>
+            </td>
+            <td>
+                <button class="btn btn-sm ${isBlocked ? 'btn-success' : 'btn-danger'}" onclick="toggleBlockUser('${safeKey}', ${!isBlocked})">
+                    ${isBlocked ? 'Débloquer' : 'Bloquer'}
+                </button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+});
+
+window.toggleBlockUser = function(userKey, newBlockStatus){
+    update(ref(db, `users/${userKey}`), { blocked: newBlockStatus }).then(() => {
+        showToast(newBlockStatus ? "Utilisateur suspendu" : "Utilisateur réactivé", "info");
+    });
+};
+
+/* =========================================================
+   7. SITE SETTINGS
+========================================================= */
+onValue(ref(db, "site_settings"), (snap) => {
+    const s = snap.val();
+    if(s){
+        if(s.phone) document.getElementById("settingPhone").value = s.phone;
+        if(s.whatsapp) document.getElementById("settingWhatsapp").value = s.whatsapp;
+        if(s.location) document.getElementById("settingLocation").value = s.location;
     }
 });
 
-window.deleteCourse = async function(courseId) {
-    if(!confirm(`هل أنت متأكد من حذف الدورة (${courseId}) من الكتالوج؟`)) return;
-    try {
-        await remove(ref(db, `online_courses/${courseId}`));
-        logAction("حذف دورة", `تم حذف الدورة ${courseId} من الكتالوج`);
-        showToast("تم حذف الدورة بنجاح");
-    } catch(err) {
-        showToast("خطأ أثناء حذف الدورة: " + err.message);
-    }
-};
-
-// ======================= 5. إدارة المستخدمين =======================
-function renderUsersTable(users) {
-    const tbody = document.getElementById("usersTableBody");
-    const search = document.getElementById("userSearchInput").value.toLowerCase();
-    const roleFilter = document.getElementById("userRoleFilter").value;
-
-    const filtered = users.filter(u => {
-        const matchSearch = (u.name || "").toLowerCase().includes(search) || (u.email || "").toLowerCase().includes(search);
-        const matchRole = roleFilter === "all" ? true : (u.role || "student") === roleFilter;
-        return matchSearch && matchRole;
-    });
-
-    if(filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">لا يوجد مستخدمون مطابقون.</td></tr>`;
-        return;
-    }
-
-    tbody.innerHTML = filtered.map(u => {
-        const userKey = emailToKey(u.email);
-        const dateStr = u.createdAt ? new Date(u.createdAt).toLocaleDateString('ar-DZ') : "-";
-        const isBlocked = u.blocked === true;
-        const isAdmin = u.role === "admin";
-
-        return `
-            <tr>
-                <td><strong>${u.name || 'بدون اسم'}</strong></td>
-                <td>${u.email}</td>
-                <td>${u.phone || '-'}</td>
-                <td><small style="color:var(--text-muted);">${dateStr}</small></td>
-                <td>
-                    <span class="badge ${isAdmin ? 'purple' : 'info'}" style="${isAdmin ? 'background:var(--purple-soft);color:var(--purple);' : ''}">
-                        ${isAdmin ? 'مسؤول Admin' : 'طالب Student'}
-                    </span>
-                </td>
-                <td>
-                    <span class="badge ${isBlocked ? 'danger' : 'success'}">
-                        ${isBlocked ? 'محظور' : 'نشط'}
-                    </span>
-                </td>
-                <td>
-                    <div style="display:flex; gap:6px;">
-                        <button onclick="toggleUserBlock('${userKey}', ${!isBlocked})" class="btn btn-outline" style="padding:4px 8px; font-size:12px; color:${isBlocked ? 'var(--success)' : 'var(--danger)'};">
-                            ${isBlocked ? 'فك الحظر' : 'حظر الحساب'}
-                        </button>
-                        <button onclick="toggleUserRole('${userKey}', '${isAdmin ? 'student' : 'admin'}')" class="btn btn-outline" style="padding:4px 8px; font-size:12px;">
-                            ${isAdmin ? 'خفض لطالب' : 'ترقية لأدمن'}
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        `;
-    }).join("");
-}
-
-window.toggleUserBlock = async function(userKey, blockStatus) {
-    if(!confirm(`هل أنت متأكد من ${blockStatus ? 'حظر' : 'إلغاء حظر'} هذا المستخدم؟`)) return;
-    try {
-        await update(ref(db, `users/${userKey}`), { blocked: blockStatus });
-        logAction("حظر مستخدم", `${blockStatus ? 'حظر' : 'فك حظر'} المستخدم ${userKey}`);
-        showToast("تم تحديث حالة المستخدم بنجاح");
-    } catch(err) {
-        showToast("خطأ: " + err.message);
-    }
-};
-
-window.toggleUserRole = async function(userKey, newRole) {
-    if(!confirm(`هل أنت متأكد من تغيير صلاحية المستخدم إلى ${newRole}؟`)) return;
-    try {
-        await update(ref(db, `users/${userKey}`), { role: newRole });
-        logAction("تغيير صلاحية", `تعديل صلاحية ${userKey} إلى ${newRole}`);
-        showToast("تم تحديث صلاحية المستخدم بنجاح");
-    } catch(err) {
-        showToast("خطأ: " + err.message);
-    }
-};
-
-// ======================= 6. استمارات ورسائل التواصل =======================
-function renderMessagesTable(msgs) {
-    const tbody = document.getElementById("messagesTableBody");
-    if(msgs.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">لا توجد رسائل واردة حالياً.</td></tr>`;
-        return;
-    }
-
-    tbody.innerHTML = msgs.map(m => {
-        const dateStr = m.createdAt ? new Date(m.createdAt).toLocaleString('ar-DZ') : (m.timestamp || '-');
-        const cleanPhone = (m.phone || '').replace(/[^0-9]/g, '');
-
-        return `
-            <tr>
-                <td><small style="color:var(--text-muted);">${dateStr}</small></td>
-                <td><strong>${m.name}</strong></td>
-                <td>${m.email}<br><small style="color:var(--purple);">${m.phone || ''}</small></td>
-                <td><span class="badge info">${m.service || 'عام'}</span></td>
-                <td style="max-width: 250px; font-size:12.5px;">${m.message}</td>
-                <td>
-                    <div style="display:flex; gap:6px;">
-                        ${m.phone ? `<a href="tel:${cleanPhone}" class="btn btn-outline" style="padding:4px 8px; font-size:12px;">📞 اتصال</a>` : ''}
-                        ${m.phone ? `<a href="https://wa.me/${cleanPhone}" target="_blank" class="btn btn-success" style="padding:4px 8px; font-size:12px;">واتساب</a>` : ''}
-                    </div>
-                </td>
-                <td>
-                    <button onclick="deleteMessage('${m.id}')" class="btn btn-outline" style="padding:4px 8px; color:var(--danger);">🗑</button>
-                </td>
-            </tr>
-        `;
-    }).join("");
-}
-
-window.deleteMessage = async function(msgId) {
-    if(!confirm("هل تريد حذف هذه الرسالة من السجل؟")) return;
-    try {
-        await remove(ref(db, `contacts_submissions/${msgId}`));
-        logAction("حذف رسالة", `تم حذف الرسالة ${msgId}`);
-        showToast("تم حذف الرسالة بنجاح");
-    } catch(err) {
-        showToast("خطأ: " + err.message);
-    }
-};
-
-// ======================= 7. إعدادات الموقع المباشرة =======================
-function loadSiteSettings() {
-    onValue(ref(db, "site_settings"), (snap) => {
-        const s = snap.val() || {};
-        document.getElementById("settingPhone").value = s.phone || "+213 559 066 605";
-        document.getElementById("settingWhatsapp").value = s.whatsapp || "213559066605";
-        document.getElementById("settingLocation").value = s.location || "Mohammadia — Alger, Algérie";
-    });
-}
-
-document.getElementById("siteSettingsForm").addEventListener("submit", async (e) => {
+document.getElementById("settingsForm").addEventListener("submit", (e) => {
     e.preventDefault();
-    const btn = document.getElementById("saveSettingsBtn");
-    btn.disabled = true;
-    btn.textContent = "جاري الحفظ في الموقع...";
-
-    const payload = {
+    const settings = {
         phone: document.getElementById("settingPhone").value.trim(),
         whatsapp: document.getElementById("settingWhatsapp").value.trim(),
         location: document.getElementById("settingLocation").value.trim(),
         updatedAt: Date.now()
     };
 
-    try {
-        await set(ref(db, "site_settings"), payload);
-        logAction("إعدادات الموقع", "تم تحديث أرقام التواصل والعنوان المعروضة في الموقع الرئيسي");
-        showToast("تم تحديث إعدادات الموقع الرئيسي فورياً!");
-    } catch(err) {
-        showToast("خطأ أثناء الحفظ: " + err.message);
-    } finally {
-        btn.disabled = false;
-        btn.textContent = "حفظ الإعدادات فورياً في الموقع";
-    }
+    set(ref(db, "site_settings"), settings).then(() => {
+        showToast("Paramètres du site mis à jour !", "success");
+    });
 });
-
-// ======================= 8. الرسوم البيانية الحقيقية Chart.js =======================
-function loadAnalyticsChart() {
-    onValue(ref(db, "analytics/daily_visits"), (snap) => {
-        const visits = snap.val() || {};
-        const labels = Object.keys(visits).slice(-7); // آخر 7 أيام حقيقية مسجلة
-        const data = labels.map(k => visits[k]);
-
-        const ctx = document.getElementById("visitsChart").getContext("2d");
-        if(visitsChartInstance) visitsChartInstance.destroy();
-
-        visitsChartInstance = new Chart(ctx, {
-            type: "line",
-            data: {
-                labels: labels.length ? labels : ["اليوم"],
-                datasets: [{
-                    label: "عدد الزيارات الحقيقية",
-                    data: data.length ? data : [0],
-                    borderColor: "#7525B5",
-                    backgroundColor: "rgba(117, 37, 181, 0.08)",
-                    borderWidth: 2.5,
-                    fill: true,
-                    tension: 0.35
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
-            }
-        });
-    });
-}
-
-function updateOrdersChart(pending, valid, refused) {
-    const ctx = document.getElementById("ordersChart").getContext("2d");
-    if(ordersChartInstance) ordersChartInstance.destroy();
-
-    ordersChartInstance = new Chart(ctx, {
-        type: "doughnut",
-        data: {
-            labels: ["قيد المراجعة", "مقبولة", "مرفوضة"],
-            datasets: [{
-                data: [pending, valid, refused],
-                backgroundColor: ["#F39C12", "#27AE60", "#E74C3C"],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: "bottom", labels: { font: { family: 'Cairo' } } }
-            }
-        }
-    });
-}
-
-// ======================= 9. سجل العمليات Audit Trail =======================
-async function logAction(actionType, details) {
-    try {
-        await push(ref(db, "admin_logs"), {
-            admin: currentAdmin?.name || currentAdmin?.email || "Admin",
-            actionType: actionType,
-            details: details,
-            timestamp: Date.now()
-        });
-    } catch(e){}
-}
-
-function loadAuditLogs() {
-    onValue(ref(db, "admin_logs"), (snap) => {
-        const logs = snap.val() || {};
-        const tbody = document.getElementById("logsTableBody");
-        const list = Object.values(logs).reverse().slice(0, 50); // أحدث 50 حركة
-
-        if(list.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 15px;">لا توجد عمليات مسجلة حتى الآن.</td></tr>`;
-            return;
-        }
-
-        tbody.innerHTML = list.map(l => `
-            <tr>
-                <td><small style="color:var(--text-muted);">${new Date(l.timestamp).toLocaleString('ar-DZ')}</small></td>
-                <td><strong>${l.admin}</strong></td>
-                <td><span class="badge info">${l.actionType}</span></td>
-                <td>${l.details}</td>
-            </tr>
-        `).join("");
-    });
-}
-
-// ======================= 10. التصدير إلى CSV والوظائف العامة =======================
-window.exportOrdersToCSV = function() {
-    const list = Object.values(allOrders);
-    if(!list.length) return showToast("لا توجد طلبات لتصديرها!");
-
-    let csvContent = "\uFEFFتاريخ الطلب,اسم الطالب,البريد الالكتروني,رقم الهاتف,الدورة,السعر,الحالة\n";
-    list.forEach(o => {
-        const date = o.createdAt ? new Date(o.createdAt).toLocaleDateString('ar-DZ') : "";
-        csvContent += `"${date}","${o.userName || ''}","${o.userEmail || ''}","${o.userPhone || ''}","${o.courseTitle || ''}","${o.coursePrice || ''}","${o.status || ''}"\n`;
-    });
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", `BellaSkills_Orders_${new Date().toISOString().slice(0,10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    showToast("تم تحميل ملف CSV بنجاح");
-};
-
-// فلاتر البحث التفاعلية
-document.getElementById("orderSearchInput").addEventListener("input", () => renderOrdersTable(Object.values(allOrders)));
-document.getElementById("orderStatusFilter").addEventListener("change", () => renderOrdersTable(Object.values(allOrders)));
-document.getElementById("userSearchInput").addEventListener("input", () => renderUsersTable(Object.values(allUsers)));
-document.getElementById("userRoleFilter").addEventListener("change", () => renderUsersTable(Object.values(allUsers)));
-
-// التبديل بين التبويبات
-window.switchTab = function(tabId) {
-    document.querySelectorAll(".tab-content").forEach(el => el.style.display = "none");
-    document.querySelectorAll(".nav-item").forEach(el => el.classList.remove("active"));
-
-    const targetTab = document.getElementById(`tab-${tabId}`);
-    if(targetTab) targetTab.style.display = "block";
-
-    event.currentTarget.classList.add("active");
-
-    const titles = {
-        dashboard: "لوحة المؤشرات العامة",
-        orders: "إدارة طلبات الشراء والوصولات",
-        courses: "إدارة الدورات المعروضة (CMS)",
-        users: "إدارة الطلاب والمستخدمين",
-        messages: "استمارات التواصل الواردة",
-        settings: "إعدادات الموقع المباشرة",
-        logs: "سجل العمليات الإدارية"
-    };
-    document.getElementById("pageTitle").textContent = titles[tabId] || "لوحة الإدارة";
-
-    if(window.innerWidth <= 992) {
-        document.getElementById("sidebar").classList.remove("open");
-    }
-};
-
-window.toggleSidebar = function() {
-    document.getElementById("sidebar").classList.toggle("open");
-};
-
-window.openModal = function(id) { document.getElementById(id).classList.add("active"); };
-window.closeModal = function(id) { document.getElementById(id).classList.remove("active"); };
-
-function showToast(msg) {
-    const t = document.getElementById("toastBox");
-    t.textContent = msg;
-    t.style.display = "block";
-    setTimeout(() => { t.style.display = "none"; }, 3500);
-}
-
-// بدء الفحص عند تشغيل الصفحة
-checkAuth();
 </script>
 
 </body>
