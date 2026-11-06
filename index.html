@@ -42,13 +42,13 @@ body{
 }
 
 /* =========================================================
-   LOGIN SCREEN OVERLAY
+   LOGIN SCREEN OVERLAY (FIREBASE AUTH)
 ========================================================= */
 #loginGate{
     position:fixed;
     inset:0;
     z-index:99999;
-    background:linear-gradient(135deg, #241031 0%, #42105F 100%);
+    background:linear-gradient(135deg, #1f0d2c 0%, #42105F 100%);
     display:flex;
     align-items:center;
     justify-content:center;
@@ -69,12 +69,14 @@ body{
     height:64px;
     border-radius:14px;
     margin-bottom:16px;
+    object-fit:cover;
 }
 
 .login-card h2{
     font-size:22px;
     color:var(--purple-dark);
     margin-bottom:6px;
+    font-weight:800;
 }
 
 .login-card p{
@@ -112,6 +114,7 @@ body{
     width:42px;
     height:42px;
     border-radius:10px;
+    object-fit:cover;
 }
 
 .brand-text{
@@ -178,6 +181,17 @@ body{
 .sidebar-footer{
     padding:20px 16px;
     border-top:1px solid rgba(255,255,255,.08);
+}
+
+.user-info-tag{
+    display:block;
+    font-size:11px;
+    color:rgba(255,255,255,0.6);
+    margin-bottom:10px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    text-align:center;
 }
 
 .logout-btn{
@@ -269,7 +283,7 @@ body{
 }
 
 /* =========================================================
-   3D GRADIENT CARDS SYSTEM
+   3D GRADIENT CARDS SYSTEM (MODERN VECTOR ICONS)
 ========================================================= */
 .stats-grid-3d{
     display:grid;
@@ -320,16 +334,20 @@ body{
 }
 
 .card-3d .icon-box{
-    width:48px;
-    height:48px;
-    border-radius:14px;
-    background:rgba(255,255,255,0.25);
-    backdrop-filter: blur(8px);
+    width:50px;
+    height:50px;
+    border-radius:15px;
+    background:rgba(255,255,255,0.22);
+    backdrop-filter: blur(10px);
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:22px;
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
+    box-shadow: inset 0 2px 5px rgba(255,255,255,0.35);
+    color:white;
+}
+
+.card-3d .icon-box svg{
+    stroke-width:2.2;
 }
 
 .card-3d .click-hint{
@@ -408,7 +426,7 @@ body{
 }
 
 .btn{
-    padding:9px 18px;
+    padding:10px 20px;
     border-radius:8px;
     font-size:13px;
     font-weight:700;
@@ -511,6 +529,12 @@ tr:hover td{
     border-color:var(--purple);
 }
 
+.grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
 .modal-overlay{
     position:fixed;
     inset:0;
@@ -576,6 +600,7 @@ tr:hover td{
     .sidebar{ width:100%; height:auto; position:relative; }
     .topbar{ padding:0 20px; }
     .content{ padding:20px; }
+    .grid-2{ grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -585,19 +610,26 @@ tr:hover td{
 <div id="toastWrap" class="toast-wrap"></div>
 
 <!-- =========================================================
-     1. LOGIN GATE
+     1. LOGIN GATE (SECURE FIREBASE AUTHENTICATION)
 ========================================================= -->
 <div id="loginGate">
     <div class="login-card">
         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimZMGp5BR7hQp2daYfz6ii_IJ4wWEWk347tsUnOn42aD1hNGww9MAb17n3m9Qiwxc4-iyCYhjuPI-kQHJKLCZ2YrplFnSh5YGWTlpZ90DxQUjtwszIJXTtWRJdhz56qv3eh3QLGehQCUcZibgMvmg0UyXd0ewj3C-PY0xg_WTvoqTMcNFRRWsJ2fnTOYY/s320/1000013350.png" alt="Bella Skills">
         <h2>Administration HUB</h2>
-        <p>Veuillez entrer le code d'accès administrateur</p>
-        <div class="form-group" style="text-align:left;">
-            <input type="password" id="adminPassInput" placeholder="Code secret (Par défaut: admin123)" autofocus>
-        </div>
-        <button class="btn btn-primary" style="width:100%;padding:12px;justify-content:center;" onclick="attemptAdminLogin()">
-            Déverrouiller le Panneau
-        </button>
+        <p>Connexion sécurisée via compte Firebase</p>
+        <form id="adminLoginForm" onsubmit="event.preventDefault(); window.loginWithFirebaseAuth();">
+            <div class="form-group" style="text-align:left;">
+                <label>Email Administrateur</label>
+                <input type="email" id="adminEmailInput" placeholder="bellaskills@email.com" required autofocus>
+            </div>
+            <div class="form-group" style="text-align:left;">
+                <label>Mot de passe</label>
+                <input type="password" id="adminPasswordInput" placeholder="••••••••" required>
+            </div>
+            <button type="submit" id="adminLoginSubmitBtn" class="btn btn-primary" style="width:100%;padding:12px;justify-content:center;">
+                Se connecter
+            </button>
+        </form>
     </div>
 </div>
 
@@ -649,14 +681,15 @@ tr:hover td{
 
         <button class="nav-item" id="nav_settings" onclick="switchTab('settings')">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            Paramètres du Site
+            Paramètres & Coordonnées
         </button>
     </nav>
 
     <div class="sidebar-footer">
-        <button class="logout-btn" onclick="logoutAdmin()">
+        <span class="user-info-tag" id="sidebarUserEmail">Administrateur</span>
+        <button class="logout-btn" onclick="window.logoutAdmin()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-            Verrouiller la session
+            Déconnexion Firebase
         </button>
     </div>
 </aside>
@@ -676,14 +709,13 @@ tr:hover td{
 
     <div class="content">
 
-        <!-- =========================================================
-             SECTION: 3D GRADIENT STATS CARDS (INTERACTIVE & REAL)
-        ========================================================= -->
+        <!-- 3D STATS CARDS -->
         <div class="stats-grid-3d">
-            <!-- 1. Visites du jour -->
             <div class="card-3d card-grad-blue" onclick="switchTab('dashboard')">
                 <div class="top-row">
-                    <div class="icon-box">👁️</div>
+                    <div class="icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </div>
                     <span class="click-hint">Aujourd'hui ➔</span>
                 </div>
                 <div class="bottom-row">
@@ -692,732 +724,7 @@ tr:hover td{
                 </div>
             </div>
 
-            <!-- 2. Visites mensuelles -->
             <div class="card-3d card-grad-indigo" onclick="switchTab('dashboard')">
                 <div class="top-row">
-                    <div class="icon-box">📅</div>
-                    <span class="click-hint">Ce Mois ➔</span>
-                </div>
-                <div class="bottom-row">
-                    <div class="stat-title">Visites Mensuelles</div>
-                    <div class="stat-value" id="statMonthlyVisits">0</div>
-                </div>
-            </div>
-
-            <!-- 3. Formations en ligne -->
-            <div class="card-3d card-grad-purple" onclick="switchTab('courses')">
-                <div class="top-row">
-                    <div class="icon-box">💻</div>
-                    <span class="click-hint">Gérer ➔</span>
-                </div>
-                <div class="bottom-row">
-                    <div class="stat-title">Formations En Ligne</div>
-                    <div class="stat-value" id="statOnlineCourses">0</div>
-                </div>
-            </div>
-
-            <!-- 4. Inscriptions en Présentiel -->
-            <div class="card-3d card-grad-orange" onclick="switchTab('onsite')">
-                <div class="top-row">
-                    <div class="icon-box">🏛️</div>
-                    <span class="click-hint">Consulter ➔</span>
-                </div>
-                <div class="bottom-row">
-                    <div class="stat-title">Inscriptions Présentiel</div>
-                    <div class="stat-value" id="statOnsiteCount">0</div>
-                </div>
-            </div>
-
-            <!-- 5. Demandes de Service / Contact -->
-            <div class="card-3d card-grad-emerald" onclick="switchTab('messages')">
-                <div class="top-row">
-                    <div class="icon-box">📩</div>
-                    <span class="click-hint">Voir Messages ➔</span>
-                </div>
-                <div class="bottom-row">
-                    <div class="stat-title">Demandes de Service</div>
-                    <div class="stat-value" id="statServiceRequests">0</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 1: DASHBOARD STATS -->
-        <section id="tab_dashboard">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Dernières commandes nécessitant validation</h3>
-                    <button class="btn btn-primary btn-sm" onclick="switchTab('orders')">Voir toutes les commandes</button>
-                </div>
-                <div class="table-responsive">
-                    <table id="quickOrdersTable">
-                        <thead>
-                            <tr>
-                                <th>Étudiant</th>
-                                <th>Formation</th>
-                                <th>Prix</th>
-                                <th>Preuve</th>
-                                <th>Statut</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 2: ORDERS & PAYMENTS -->
-        <section id="tab_orders" style="display:none;">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Toutes les Commandes & Preuves de Paiement</h3>
-                </div>
-                <div class="table-responsive">
-                    <table id="fullOrdersTable">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Nom & Email</th>
-                                <th>Téléphone</th>
-                                <th>Formation</th>
-                                <th>Montant</th>
-                                <th>Reçu CCP/Baridi</th>
-                                <th>Statut Actuel</th>
-                                <th>Action Administrative</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 3: COURSES CMS -->
-        <section id="tab_courses" style="display:none;">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Catalogue des Formations en Ligne</h3>
-                    <button class="btn btn-primary" onclick="openCourseModal()">+ Ajouter une formation</button>
-                </div>
-                <div class="table-responsive">
-                    <table id="coursesTable">
-                        <thead>
-                            <tr>
-                                <th>Aperçu</th>
-                                <th>Titre de la formation</th>
-                                <th>Prix</th>
-                                <th>URL Vidéo</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB: ONSITE REGISTRATIONS -->
-        <section id="tab_onsite" style="display:none;">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Inscriptions aux Formations Présentielles</h3>
-                </div>
-                <div class="table-responsive">
-                    <table id="onsiteTable">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Nom & Prénom</th>
-                                <th>Téléphone</th>
-                                <th>Email</th>
-                                <th>Formation Choisie</th>
-                                <th>Statut</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 4: USERS -->
-        <section id="tab_users" style="display:none;">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Étudiants & Utilisateurs Inscrits</h3>
-                </div>
-                <div class="table-responsive">
-                    <table id="usersTable">
-                        <thead>
-                            <tr>
-                                <th>Nom Complet</th>
-                                <th>Adresse Email</th>
-                                <th>Téléphone</th>
-                                <th>Statut Compte</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 5: MESSAGES -->
-        <section id="tab_messages" style="display:none;">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Demandes de Contact & Devis de Service</h3>
-                </div>
-                <div class="table-responsive">
-                    <table id="messagesTable">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Expéditeur</th>
-                                <th>Contact</th>
-                                <th>Service Demandé</th>
-                                <th>Message</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 6: SETTINGS -->
-        <section id="tab_settings" style="display:none;">
-            <div class="card" style="max-width:680px;">
-                <div class="card-header">
-                    <h3>Paramètres Globaux du Site</h3>
-                </div>
-                <form id="settingsForm">
-                    <div class="form-group">
-                        <label>Numéro de Téléphone Principal</label>
-                        <input type="text" id="settingPhone" placeholder="+213 559 066 605">
-                    </div>
-                    <div class="form-group">
-                        <label>Numéro WhatsApp (avec indicatif)</label>
-                        <input type="text" id="settingWhatsapp" placeholder="+213 559 066 605">
-                    </div>
-                    <div class="form-group">
-                        <label>Localisation affichée</label>
-                        <input type="text" id="settingLocation" placeholder="Mohammadia — Alger, Algérie">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
-                </form>
-            </div>
-        </section>
-
-    </div>
-</main>
-
-<!-- =========================================================
-     MODAL: COURSE (ADD / EDIT)
-========================================================= -->
-<div class="modal-overlay" id="courseModal">
-    <div class="modal-box">
-        <button class="modal-close" onclick="closeCourseModal()">✕</button>
-        <h3 id="courseModalTitle" style="color:var(--purple-dark);margin-bottom:18px;">Ajouter une formation</h3>
-        <form id="courseForm">
-            <input type="hidden" id="courseIdField">
-            <div class="form-group">
-                <label>Titre de la Formation</label>
-                <input type="text" id="courseTitleField" required placeholder="ex: Formation Complète Soft Skills">
-            </div>
-            <div class="form-group">
-                <label>Prix (en DZD)</label>
-                <input type="text" id="coursePriceField" required placeholder="ex: 12 000 DZD">
-            </div>
-            <div class="form-group">
-                <label>URL de l'image de couverture</label>
-                <input type="url" id="courseImageField" required placeholder="https://images.unsplash.com/...">
-            </div>
-            <div class="form-group">
-                <label>URL Vidéo YouTube Embed (Accessible après achat)</label>
-                <input type="url" id="courseVideoField" required placeholder="https://www.youtube.com/embed/...">
-            </div>
-            <div class="form-group">
-                <label>Description du cours</label>
-                <textarea id="courseDescField" rows="3" required placeholder="Description détaillée du programme..."></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary" style="width:100%;">Enregistrer la formation</button>
-        </form>
-    </div>
-</div>
-
-<!-- =========================================================
-     MODAL: RECEIPT PROOF PREVIEW
-========================================================= -->
-<div class="modal-overlay" id="receiptModal">
-    <div class="modal-box" style="text-align:center;width:min(680px,100%);">
-        <button class="modal-close" onclick="closeReceiptModal()">✕</button>
-        <h3 style="color:var(--purple-dark);margin-bottom:14px;">Reçu de Paiement</h3>
-        <div id="receiptPreviewWrap" style="max-height:70vh;overflow-y:auto;margin-bottom:15px;background:#eee;padding:10px;border-radius:10px;"></div>
-        <a id="receiptDownloadLink" href="#" target="_blank" class="btn btn-primary btn-sm">Ouvrir en plein écran / Télécharger</a>
-    </div>
-</div>
-
-<!-- =========================================================
-     FIREBASE LOGIC & SCRIPTS
-========================================================= -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
-import { getDatabase, ref, set, get, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-// NOUVELLE CONFIGURATION FIREBASE FOURNIE
-const firebaseConfig = {
-  apiKey: "AIzaSyA1xTHV828178vImPGLFQhr1DS4k9ME28s",
-  authDomain: "bellaskills-8edbb.firebaseapp.com",
-  databaseURL: "https://bellaskills-8edbb-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "bellaskills-8edbb",
-  storageBucket: "bellaskills-8edbb.firebasestorage.app",
-  messagingSenderId: "730699617338",
-  appId: "1:730699617338:web:2bacbc4078984770e31103",
-  measurementId: "G-E8RP1L6KWJ"
-};
-
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const db = getDatabase(app, firebaseConfig.databaseURL);
-
-/* Auth Protection */
-const ADMIN_PASS = "admin123";
-
-window.attemptAdminLogin = function(){
-    const input = document.getElementById("adminPassInput").value.trim();
-    if(input === ADMIN_PASS){
-        sessionStorage.setItem("bs_admin_auth", "true");
-        document.getElementById("loginGate").style.display = "none";
-        showToast("Session ouverte avec succès", "success");
-    } else {
-        showToast("Code d'accès incorrect", "danger");
-    }
-};
-
-window.logoutAdmin = function(){
-    sessionStorage.removeItem("bs_admin_auth");
-    location.reload();
-};
-
-if(sessionStorage.getItem("bs_admin_auth") === "true"){
-    document.getElementById("loginGate").style.display = "none";
-}
-
-/* Toast */
-window.showToast = function(msg, type="info"){
-    const wrap = document.getElementById("toastWrap");
-    const t = document.createElement("div");
-    t.className = "toast";
-    if(type === "success") t.style.borderLeftColor = "#27AE60";
-    if(type === "danger") t.style.borderLeftColor = "#C0392B";
-    t.textContent = msg;
-    wrap.appendChild(t);
-    setTimeout(() => { t.remove(); }, 3500);
-};
-
-/* Tabs Switcher */
-window.switchTab = function(tabName){
-    document.querySelectorAll(".sidebar-nav .nav-item").forEach(btn => btn.classList.remove("active"));
-    const activeNavBtn = document.getElementById(`nav_${tabName}`);
-    if(activeNavBtn) activeNavBtn.classList.add("active");
-
-    const titles = {
-        dashboard: "Vue d'ensemble",
-        orders: "Commandes & Validation des Paiements",
-        courses: "Gestion des Formations En Ligne",
-        onsite: "Inscriptions aux Formations Présentielles",
-        users: "Gestion des Utilisateurs",
-        messages: "Demandes de Contact & Devis",
-        settings: "Paramètres Globaux"
-    };
-
-    document.getElementById("topbarTitle").textContent = titles[tabName] || "Administration";
-    ['dashboard', 'orders', 'courses', 'onsite', 'users', 'messages', 'settings'].forEach(t => {
-        const el = document.getElementById(`tab_${t}`);
-        if(el) el.style.display = (t === tabName) ? "block" : "none";
-    });
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-
-/* =========================================================
-   1. REAL-TIME ORDERS LISTENER
-========================================================= */
-let globalOrders = {};
-
-onValue(ref(db, "orders"), (snap) => {
-    globalOrders = snap.val() || {};
-    const ordersArray = Object.values(globalOrders);
-
-    let pendingCount = 0;
-    const quickTbody = document.querySelector("#quickOrdersTable tbody");
-    const fullTbody = document.querySelector("#fullOrdersTable tbody");
-    quickTbody.innerHTML = "";
-    fullTbody.innerHTML = "";
-
-    ordersArray.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
-
-    ordersArray.forEach(o => {
-        if(o.status === "en_attente"){
-            pendingCount++;
-        }
-
-        // Dashboard quick row
-        if(o.status === "en_attente"){
-            const qRow = document.createElement("tr");
-            qRow.innerHTML = `
-                <td><strong>${o.userName || o.userEmail}</strong></td>
-                <td>${o.courseTitle || '-'}</td>
-                <td><strong style="color:var(--success);">${o.coursePrice || '-'}</strong></td>
-                <td>
-                    ${o.proofImage ? `<button class="btn btn-outline btn-sm" onclick="viewReceipt('${o.orderId}')">Voir reçu</button>` : 'Aucun'}
-                </td>
-                <td><span class="status-tag status-${o.status}">En attente</span></td>
-                <td>
-                    <button class="btn btn-success btn-sm" onclick="setOrderStatus('${o.orderId}', 'valide')">Valider</button>
-                    <button class="btn btn-danger btn-sm" onclick="setOrderStatus('${o.orderId}', 'refuse')">Refuser</button>
-                </td>
-            `;
-            quickTbody.appendChild(qRow);
-        }
-
-        // Full orders row
-        const fRow = document.createElement("tr");
-        const dateStr = o.createdAt ? new Date(o.createdAt).toLocaleDateString('fr-FR') : '-';
-        fRow.innerHTML = `
-            <td>${dateStr}</td>
-            <td><strong>${o.userName || '-'}</strong><br><small style="color:var(--muted);">${o.userEmail || '-'}</small></td>
-            <td>${o.userPhone || '-'}</td>
-            <td>${o.courseTitle || '-'}</td>
-            <td><strong>${o.coursePrice || '-'}</strong></td>
-            <td>
-                ${o.proofImage ? `<button class="btn btn-outline btn-sm" onclick="viewReceipt('${o.orderId}')">🔎 Examiner</button>` : 'Aucun'}
-            </td>
-            <td><span class="status-tag status-${o.status}">${o.status === 'valide' ? 'Validé' : o.status === 'refuse' ? 'Refusé' : 'En attente'}</span></td>
-            <td>
-                <button class="btn btn-success btn-sm" title="Valider" onclick="setOrderStatus('${o.orderId}', 'valide')">✓</button>
-                <button class="btn btn-warning btn-sm" title="En attente" onclick="setOrderStatus('${o.orderId}', 'en_attente')">⏳</button>
-                <button class="btn btn-danger btn-sm" title="Refuser" onclick="setOrderStatus('${o.orderId}', 'refuse')">✕</button>
-                <button class="btn btn-outline btn-sm" style="color:red;" title="Supprimer" onclick="deleteOrder('${o.orderId}')">🗑</button>
-            </td>
-        `;
-        fullTbody.appendChild(fRow);
-    });
-
-    const pBadge = document.getElementById("pendingOrdersBadge");
-    if(pendingCount > 0){
-        pBadge.style.display = "inline-block";
-        pBadge.textContent = pendingCount;
-    } else {
-        pBadge.style.display = "none";
-    }
-});
-
-window.setOrderStatus = function(orderId, status){
-    update(ref(db, `orders/${orderId}`), {
-        status: status,
-        updatedAt: Date.now()
-    }).then(() => {
-        showToast("Statut mis à jour avec succès !", "success");
-    });
-};
-
-window.deleteOrder = function(orderId){
-    if(confirm("Voulez-vous supprimer définitivement cette commande ?")){
-        remove(ref(db, `orders/${orderId}`)).then(() => {
-            showToast("Commande supprimée", "danger");
-        });
-    }
-};
-
-window.viewReceipt = function(orderId){
-    const order = globalOrders[orderId];
-    if(!order || !order.proofImage) return;
-
-    const wrap = document.getElementById("receiptPreviewWrap");
-    const link = document.getElementById("receiptDownloadLink");
-    link.href = order.proofImage;
-
-    if(order.proofImage.startsWith("data:application/pdf") || order.proofImage.includes(".pdf")){
-        wrap.innerHTML = `<iframe src="${order.proofImage}" style="width:100%;height:450px;border:none;"></iframe>`;
-    } else {
-        wrap.innerHTML = `<img src="${order.proofImage}" style="max-width:100%;border-radius:8px;">`;
-    }
-
-    document.getElementById("receiptModal").classList.add("active");
-};
-
-window.closeReceiptModal = () => document.getElementById("receiptModal").classList.remove("active");
-
-/* =========================================================
-   2. REAL-TIME COURSES CRUD & STATS
-========================================================= */
-let globalCourses = {};
-
-onValue(ref(db, "online_courses"), (snap) => {
-    globalCourses = snap.val() || {};
-    const coursesArray = Object.values(globalCourses);
-    
-    // Mise à jour de la boîte 3D: Formations En Ligne
-    document.getElementById("statOnlineCourses").textContent = coursesArray.length;
-
-    const tbody = document.querySelector("#coursesTable tbody");
-    tbody.innerHTML = "";
-
-    coursesArray.forEach(c => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td><img src="${c.image}" style="width:50px;height:50px;border-radius:8px;object-fit:cover;"></td>
-            <td><strong>${c.title}</strong><br><small style="color:var(--muted);">${(c.description || '').substring(0,60)}...</small></td>
-            <td><strong>${c.price}</strong></td>
-            <td><a href="${c.videoUrl}" target="_blank" style="color:var(--purple);font-size:12px;">Lien Vidéo</a></td>
-            <td>
-                <button class="btn btn-outline btn-sm" onclick="editCourse('${c.id}')">✏️ Modifier</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteCourse('${c.id}')">🗑 Supprimer</button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-});
-
-window.openCourseModal = function(courseId = null){
-    const modal = document.getElementById("courseModal");
-    const form = document.getElementById("courseForm");
-    form.reset();
-
-    if(courseId && globalCourses[courseId]){
-        const c = globalCourses[courseId];
-        document.getElementById("courseModalTitle").textContent = "Modifier la formation";
-        document.getElementById("courseIdField").value = c.id;
-        document.getElementById("courseTitleField").value = c.title;
-        document.getElementById("coursePriceField").value = c.price;
-        document.getElementById("courseImageField").value = c.image;
-        document.getElementById("courseVideoField").value = c.videoUrl;
-        document.getElementById("courseDescField").value = c.description;
-    } else {
-        document.getElementById("courseModalTitle").textContent = "Ajouter une formation";
-        document.getElementById("courseIdField").value = "c_" + Date.now();
-    }
-
-    modal.classList.add("active");
-};
-
-window.closeCourseModal = () => document.getElementById("courseModal").classList.remove("active");
-
-document.getElementById("courseForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const id = document.getElementById("courseIdField").value;
-    const courseData = {
-        id: id,
-        title: document.getElementById("courseTitleField").value.trim(),
-        price: document.getElementById("coursePriceField").value.trim(),
-        image: document.getElementById("courseImageField").value.trim(),
-        videoUrl: document.getElementById("courseVideoField").value.trim(),
-        description: document.getElementById("courseDescField").value.trim(),
-        updatedAt: Date.now()
-    };
-
-    set(ref(db, `online_courses/${id}`), courseData).then(() => {
-        closeCourseModal();
-        showToast("Formation enregistrée avec succès !", "success");
-    });
-});
-
-window.editCourse = (id) => openCourseModal(id);
-
-window.deleteCourse = function(courseId){
-    if(confirm("Confirmez-vous la suppression de ce cours ?")){
-        remove(ref(db, `online_courses/${courseId}`)).then(() => {
-            showToast("Formation supprimée", "danger");
-        });
-    }
-};
-
-/* =========================================================
-   3. REAL-TIME ONSITE REGISTRATIONS (تسجيل حظوري)
-========================================================= */
-onValue(ref(db, "onsite_registrations"), (snap) => {
-    const list = snap.val() || {};
-    const entries = Object.entries(list).reverse();
-    
-    // Mise à jour de la boîte 3D: Inscriptions Présentiel
-    document.getElementById("statOnsiteCount").textContent = entries.length;
-
-    const onsiteBadge = document.getElementById("onsiteBadge");
-    if(entries.length > 0){
-        onsiteBadge.style.display = "inline-block";
-        onsiteBadge.textContent = entries.length;
-    } else {
-        onsiteBadge.style.display = "none";
-    }
-
-    const tbody = document.querySelector("#onsiteTable tbody");
-    tbody.innerHTML = "";
-
-    entries.forEach(([key, reg]) => {
-        const tr = document.createElement("tr");
-        const dateStr = reg.timestamp ? new Date(reg.timestamp).toLocaleDateString('fr-FR') : '-';
-        tr.innerHTML = `
-            <td>${dateStr}</td>
-            <td><strong>${reg.name || '-'}</strong></td>
-            <td>${reg.phone || '-'}</td>
-            <td>${reg.email || '-'}</td>
-            <td><strong style="color:var(--purple);">${reg.courseName || reg.training || 'Formation Présentielle'}</strong></td>
-            <td><span class="status-tag status-valide">${reg.status || 'Confirmé'}</span></td>
-            <td>
-                <button class="btn btn-outline btn-sm" style="color:red;" onclick="deleteOnsiteReg('${key}')">Supprimer</button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-});
-
-window.deleteOnsiteReg = function(key){
-    if(confirm("Supprimer cette inscription ?")){
-        remove(ref(db, `onsite_registrations/${key}`)).then(() => {
-            showToast("Inscription supprimée", "info");
-        });
-    }
-};
-
-/* =========================================================
-   4. CONTACTS & DEMANDES DE SERVICES (طلب خدمة)
-========================================================= */
-onValue(ref(db, "contacts_submissions"), (snap) => {
-    const messages = snap.val() || {};
-    const list = Object.entries(messages).reverse();
-
-    // Mise à jour de la boîte 3D: Demandes de Service
-    document.getElementById("statServiceRequests").textContent = list.length;
-
-    const inboxBadge = document.getElementById("inboxBadge");
-    if(list.length > 0){
-        inboxBadge.style.display = "inline-block";
-        inboxBadge.textContent = list.length;
-    } else {
-        inboxBadge.style.display = "none";
-    }
-
-    const tbody = document.querySelector("#messagesTable tbody");
-    tbody.innerHTML = "";
-
-    list.forEach(([key, m]) => {
-        const tr = document.createElement("tr");
-        const d = m.timestamp ? new Date(m.timestamp).toLocaleDateString('fr-FR') : '-';
-        tr.innerHTML = `
-            <td>${d}</td>
-            <td><strong>${m.name || '-'}</strong></td>
-            <td>${m.email || ''}<br><small>${m.phone || ''}</small></td>
-            <td><span class="status-tag status-en_attente">${m.service || 'Demande de Service'}</span></td>
-            <td style="max-width:280px;white-space:pre-wrap;">${m.message || '-'}</td>
-            <td>
-                <button class="btn btn-outline btn-sm" style="color:red;" onclick="deleteMessage('${key}')">Supprimer</button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-});
-
-window.deleteMessage = function(key){
-    if(confirm("Supprimer ce message ?")){
-        remove(ref(db, `contacts_submissions/${key}`)).then(() => {
-            showToast("Message supprimé", "info");
-        });
-    }
-};
-
-/* =========================================================
-   5. REAL VISITOR ANALYTICS (JOURNALIER ET MENSUEL)
-========================================================= */
-const todayKey = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-const currentMonthPrefix = todayKey.substring(0, 7);     // YYYY-MM
-
-onValue(ref(db, "analytics/daily_visits"), (snap) => {
-    const visits = snap.val() || {};
-    
-    // 1. Visites du jour réelles
-    const todayVisits = visits[todayKey] || 0;
-    document.getElementById("statDailyVisits").textContent = todayVisits;
-
-    // 2. Visites du mois réelles
-    let monthlyVisits = 0;
-    Object.keys(visits).forEach(date => {
-        if(date.startsWith(currentMonthPrefix)){
-            monthlyVisits += Number(visits[date]) || 0;
-        }
-    });
-    document.getElementById("statMonthlyVisits").textContent = monthlyVisits;
-});
-
-/* =========================================================
-   6. USERS MANAGEMENT
-========================================================= */
-onValue(ref(db, "users"), (snap) => {
-    const users = snap.val() || {};
-    const tbody = document.querySelector("#usersTable tbody");
-    tbody.innerHTML = "";
-    const usersArray = Object.values(users);
-
-    usersArray.forEach(u => {
-        const tr = document.createElement("tr");
-        const isBlocked = u.blocked === true;
-        const safeKey = (u.email || "").toLowerCase().trim().replace(/[^a-z0-9]/g, "_");
-        tr.innerHTML = `
-            <td><strong>${u.name || '-'}</strong></td>
-            <td>${u.email || '-'}</td>
-            <td>${u.phone || '-'}</td>
-            <td>
-                <span class="status-tag ${isBlocked ? 'status-refuse' : 'status-valide'}">
-                    ${isBlocked ? 'Compte Bloqué' : 'Actif'}
-                </span>
-            </td>
-            <td>
-                <button class="btn btn-sm ${isBlocked ? 'btn-success' : 'btn-danger'}" onclick="toggleBlockUser('${safeKey}', ${!isBlocked})">
-                    ${isBlocked ? 'Débloquer' : 'Bloquer'}
-                </button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-});
-
-window.toggleBlockUser = function(userKey, newBlockStatus){
-    update(ref(db, `users/${userKey}`), { blocked: newBlockStatus }).then(() => {
-        showToast(newBlockStatus ? "Utilisateur suspendu" : "Utilisateur réactivé", "info");
-    });
-};
-
-/* =========================================================
-   7. SITE SETTINGS
-========================================================= */
-onValue(ref(db, "site_settings"), (snap) => {
-    const s = snap.val();
-    if(s){
-        if(s.phone) document.getElementById("settingPhone").value = s.phone;
-        if(s.whatsapp) document.getElementById("settingWhatsapp").value = s.whatsapp;
-        if(s.location) document.getElementById("settingLocation").value = s.location;
-    }
-});
-
-document.getElementById("settingsForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const settings = {
-        phone: document.getElementById("settingPhone").value.trim(),
-        whatsapp: document.getElementById("settingWhatsapp").value.trim(),
-        location: document.getElementById("settingLocation").value.trim(),
-        updatedAt: Date.now()
-    };
-
-    set(ref(db, "site_settings"), settings).then(() => {
-        showToast("Paramètres du site mis à jour !", "success");
-    });
-});
-</script>
-
-</body>
-</html>
+                    <div class="icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect
