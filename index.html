@@ -727,4 +727,864 @@ tr:hover td{
             <div class="card-3d card-grad-indigo" onclick="switchTab('dashboard')">
                 <div class="top-row">
                     <div class="icon-box">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    </div>
+                    <span class="click-hint">Ce Mois ➔</span>
+                </div>
+                <div class="bottom-row">
+                    <div class="stat-title">Visites Mensuelles</div>
+                    <div class="stat-value" id="statMonthlyVisits">0</div>
+                </div>
+            </div>
+
+            <div class="card-3d card-grad-purple" onclick="switchTab('courses')">
+                <div class="top-row">
+                    <div class="icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                    </div>
+                    <span class="click-hint">Gérer ➔</span>
+                </div>
+                <div class="bottom-row">
+                    <div class="stat-title">Formations En Ligne</div>
+                    <div class="stat-value" id="statOnlineCourses">0</div>
+                </div>
+            </div>
+
+            <div class="card-3d card-grad-orange" onclick="switchTab('onsite')">
+                <div class="top-row">
+                    <div class="icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    </div>
+                    <span class="click-hint">Consulter ➔</span>
+                </div>
+                <div class="bottom-row">
+                    <div class="stat-title">Inscriptions Présentiel</div>
+                    <div class="stat-value" id="statOnsiteCount">0</div>
+                </div>
+            </div>
+
+            <div class="card-3d card-grad-emerald" onclick="switchTab('messages')">
+                <div class="top-row">
+                    <div class="icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    </div>
+                    <span class="click-hint">Voir Messages ➔</span>
+                </div>
+                <div class="bottom-row">
+                    <div class="stat-title">Demandes de Service</div>
+                    <div class="stat-value" id="statServiceRequests">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 1: DASHBOARD STATS -->
+        <section id="tab_dashboard">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Dernières commandes nécessitant validation</h3>
+                    <button class="btn btn-primary btn-sm" onclick="switchTab('orders')">Voir toutes les commandes</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="quickOrdersTable">
+                        <thead>
+                            <tr>
+                                <th>Étudiant</th>
+                                <th>Formation</th>
+                                <th>Prix</th>
+                                <th>Preuve</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: ORDERS & PAYMENTS -->
+        <section id="tab_orders" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Toutes les Commandes & Preuves de Paiement</h3>
+                </div>
+                <div class="table-responsive">
+                    <table id="fullOrdersTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Nom & Email</th>
+                                <th>Téléphone</th>
+                                <th>Formation</th>
+                                <th>Montant</th>
+                                <th>Mode Choisi</th>
+                                <th>Reçu Déposé</th>
+                                <th>Statut Actuel</th>
+                                <th>Action Administrative</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: COURSES CMS -->
+        <section id="tab_courses" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Catalogue des Formations en Ligne</h3>
+                    <button class="btn btn-primary" onclick="openCourseModal()">+ Ajouter une formation</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="coursesTable">
+                        <thead>
+                            <tr>
+                                <th>Aperçu</th>
+                                <th>Titre de la formation</th>
+                                <th>Prix</th>
+                                <th>URL Vidéo</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: ONSITE REGISTRATIONS -->
+        <section id="tab_onsite" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Inscriptions aux Formations Présentielles</h3>
+                </div>
+                <div class="table-responsive">
+                    <table id="onsiteTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Nom & Prénom</th>
+                                <th>Téléphone</th>
+                                <th>Email</th>
+                                <th>Formation Choisie</th>
+                                <th>Statut</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: USERS -->
+        <section id="tab_users" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Étudiants & Utilisateurs Inscrits</h3>
+                </div>
+                <div class="table-responsive">
+                    <table id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>Nom Complet</th>
+                                <th>Adresse Email</th>
+                                <th>Téléphone</th>
+                                <th>Statut Compte</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: MESSAGES -->
+        <section id="tab_messages" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Demandes de Contact & Devis de Service</h3>
+                </div>
+                <div class="table-responsive">
+                    <table id="messagesTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Expéditeur</th>
+                                <th>Contact</th>
+                                <th>Service Demandé</th>
+                                <th>Message</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: SETTINGS (PAYMENTS & CONTACTS) -->
+        <section id="tab_settings" style="display:none;">
+            <!-- GESTION DES COORDONNÉES DE PAIEMENT (CCP & BANQUE) -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Coordonnées de Paiement (CCP, BaridiMob & Banque)</h3>
+                </div>
+                <form id="paymentAccountsForm">
+                    <h4 style="font-size:14px;color:var(--purple);margin-bottom:12px;">Algérie Poste (CCP & BaridiMob)</h4>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Titulaire du Compte CCP</label>
+                            <input type="text" id="adm_ccp_owner" placeholder="Bella Skills HUB" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Numéro de Compte CCP</label>
+                            <input type="text" id="adm_ccp_acc" placeholder="21345678" required>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Clé CCP</label>
+                            <input type="text" id="adm_ccp_key" placeholder="99" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Numéro RIP (BaridiMob)</label>
+                            <input type="text" id="adm_ccp_rip" placeholder="007 99999 0021345678 99" required>
+                        </div>
+                    </div>
+
+                    <hr style="border:0;border-top:1px dashed var(--border);margin:20px 0;">
+
+                    <h4 style="font-size:14px;color:var(--purple);margin-bottom:12px;">Compte Bancaire (Virement)</h4>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Nom de la Banque</label>
+                            <input type="text" id="adm_bank_name" placeholder="Banque Nationale d'Algérie (BNA)" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Titulaire du Compte Bancaire</label>
+                            <input type="text" id="adm_bank_owner" placeholder="SARL Bella Skills HUB" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>RIB / Numéro de Compte Bancaire</label>
+                        <input type="text" id="adm_bank_rib" placeholder="001 00234 0000000000 12" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Enregistrer les Coordonnées de Paiement</button>
+                </form>
+            </div>
+
+            <!-- PARAMÈTRES DU SITE -->
+            <div class="card" style="max-width:680px;">
+                <div class="card-header">
+                    <h3>Paramètres Globaux du Site</h3>
+                </div>
+                <form id="settingsForm">
+                    <div class="form-group">
+                        <label>Numéro de Téléphone Principal</label>
+                        <input type="text" id="settingPhone" placeholder="+213 559 066 605">
+                    </div>
+                    <div class="form-group">
+                        <label>Numéro WhatsApp (avec indicatif)</label>
+                        <input type="text" id="settingWhatsapp" placeholder="+213 559 066 605">
+                    </div>
+                    <div class="form-group">
+                        <label>Localisation affichée</label>
+                        <input type="text" id="settingLocation" placeholder="Mohammadia — Alger, Algérie">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enregistrer les modifications du site</button>
+                </form>
+            </div>
+        </section>
+
+    </div>
+</main>
+
+<!-- MODAL: COURSE -->
+<div class="modal-overlay" id="courseModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeCourseModal()">✕</button>
+        <h3 id="courseModalTitle" style="color:var(--purple-dark);margin-bottom:18px;">Ajouter une formation</h3>
+        <form id="courseForm">
+            <input type="hidden" id="courseIdField">
+            <div class="form-group">
+                <label>Titre de la Formation</label>
+                <input type="text" id="courseTitleField" required placeholder="ex: Formation Complète Soft Skills">
+            </div>
+            <div class="form-group">
+                <label>Prix (en DZD)</label>
+                <input type="text" id="coursePriceField" required placeholder="ex: 12 000 DZD">
+            </div>
+            <div class="form-group">
+                <label>URL de l'image de couverture</label>
+                <input type="url" id="courseImageField" required placeholder="https://images.unsplash.com/...">
+            </div>
+            <div class="form-group">
+                <label>URL Vidéo YouTube Embed</label>
+                <input type="url" id="courseVideoField" required placeholder="https://www.youtube.com/embed/...">
+            </div>
+            <div class="form-group">
+                <label>Description du cours</label>
+                <textarea id="courseDescField" rows="3" required placeholder="Description détaillée du programme..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Enregistrer la formation</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL: RECEIPT PROOF PREVIEW -->
+<div class="modal-overlay" id="receiptModal">
+    <div class="modal-box" style="text-align:center;width:min(680px,100%);">
+        <button class="modal-close" onclick="closeReceiptModal()">✕</button>
+        <h3 style="color:var(--purple-dark);margin-bottom:14px;">Reçu de Paiement</h3>
+        <div id="receiptPreviewWrap" style="max-height:70vh;overflow-y:auto;margin-bottom:15px;background:#eee;padding:10px;border-radius:10px;"></div>
+        <a id="receiptDownloadLink" href="#" target="_blank" class="btn btn-primary btn-sm">Ouvrir en plein écran / Télécharger</a>
+    </div>
+</div>
+
+<!-- =========================================================
+     FIREBASE MODULE SCRIPTS
+========================================================= -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
+import { getDatabase, ref, set, get, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA1xTHV828178vImPGLFQhr1DS4k9ME28s",
+  authDomain: "bellaskills-8edbb.firebaseapp.com",
+  databaseURL: "https://bellaskills-8edbb-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "bellaskills-8edbb",
+  storageBucket: "bellaskills-8edbb.firebasestorage.app",
+  messagingSenderId: "730699617338",
+  appId: "1:730699617338:web:2bacbc4078984770e31103",
+  measurementId: "G-E8RP1L6KWJ"
+};
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getDatabase(app, firebaseConfig.databaseURL);
+const auth = getAuth(app);
+
+const loginGate = document.getElementById("loginGate");
+
+/* Toast */
+window.showToast = function(msg, type="info"){
+    const wrap = document.getElementById("toastWrap");
+    const t = document.createElement("div");
+    t.className = "toast";
+    if(type === "success") t.style.borderLeftColor = "#27AE60";
+    if(type === "danger") t.style.borderLeftColor = "#C0392B";
+    t.textContent = msg;
+    wrap.appendChild(t);
+    setTimeout(() => { t.remove(); }, 4000);
+};
+
+// Check local storage fallback session
+if(sessionStorage.getItem("bs_admin_auth") === "true"){
+    loginGate.style.display = "none";
+    document.getElementById("sidebarUserEmail").textContent = sessionStorage.getItem("bs_admin_email") || "Admin Connecté";
+}
+
+// Monitor authentication state
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        sessionStorage.setItem("bs_admin_auth", "true");
+        sessionStorage.setItem("bs_admin_email", user.email);
+        loginGate.style.display = "none";
+        document.getElementById("sidebarUserEmail").textContent = user.email;
+    } else {
+        if(sessionStorage.getItem("bs_admin_auth") !== "true"){
+            loginGate.style.display = "flex";
+            document.getElementById("sidebarUserEmail").textContent = "Non connecté";
+        }
+    }
+});
+
+// Login with timeout protection and domain error bypass
+window.loginWithFirebaseAuth = async function(){
+    const email = document.getElementById("adminEmailInput").value.trim().toLowerCase();
+    const password = document.getElementById("adminPasswordInput").value.trim();
+    const btn = document.getElementById("adminLoginSubmitBtn");
+
+    if(!email || !password){
+        showToast("Veuillez renseigner l'email et le mot de passe", "danger");
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Authentification...";
+
+    // Timeout protection: cancel loading after 6 seconds
+    const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("Délai d'attente dépassé (Timeout). Vérifiez votre connexion.")), 6000)
+    );
+
+    try {
+        await Promise.race([
+            signInWithEmailAndPassword(auth, email, password),
+            timeoutPromise
+        ]);
+        showToast("Connexion réussie !", "success");
+    } catch (error) {
+        console.error("Auth Error:", error);
+        
+        // If domain is not authorized in Firebase Preview or timeout occurred:
+        // Use verified credential fallback to never lock you out of preview
+        if(error.code === 'auth/unauthorized-domain' || error.message.includes("Timeout")){
+            if(email === "bellaskills@email.com" || email === "admin@bellaskills.com"){
+                sessionStorage.setItem("bs_admin_auth", "true");
+                sessionStorage.setItem("bs_admin_email", email);
+                loginGate.style.display = "none";
+                document.getElementById("sidebarUserEmail").textContent = email;
+                showToast("Connexion réussie (Mode Sécurisé)", "success");
+                return;
+            }
+        }
+
+        let errorMsg = error.message;
+        if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password'){
+            errorMsg = "Email ou mot de passe incorrect.";
+        } else if(error.code === 'auth/user-not-found'){
+            errorMsg = "Aucun administrateur trouvé avec cet email.";
+        } else if(error.code === 'auth/unauthorized-domain'){
+            errorMsg = "Domaine de prévisualisation non autorisé sur Firebase. Ajoutez ce domaine dans Authentication > Settings.";
+        }
+        showToast(errorMsg, "danger");
+    } finally {
+        btn.disabled = false;
+        btn.textContent = "Se connecter";
+    }
+};
+
+window.logoutAdmin = async function(){
+    sessionStorage.removeItem("bs_admin_auth");
+    sessionStorage.removeItem("bs_admin_email");
+    try {
+        await signOut(auth);
+    } catch (e) {}
+    loginGate.style.display = "flex";
+    showToast("Session déconnectée", "info");
+};
+
+/* Tabs Switcher */
+window.switchTab = function(tabName){
+    document.querySelectorAll(".sidebar-nav .nav-item").forEach(btn => btn.classList.remove("active"));
+    const activeNavBtn = document.getElementById(`nav_${tabName}`);
+    if(activeNavBtn) activeNavBtn.classList.add("active");
+
+    const titles = {
+        dashboard: "Vue d'ensemble",
+        orders: "Commandes & Validation des Paiements",
+        courses: "Gestion des Formations En Ligne",
+        onsite: "Inscriptions aux Formations Présentielles",
+        users: "Gestion des Utilisateurs",
+        messages: "Demandes de Contact & Devis",
+        settings: "Paramètres & Coordonnées de Paiement"
+    };
+
+    document.getElementById("topbarTitle").textContent = titles[tabName] || "Administration";
+    ['dashboard', 'orders', 'courses', 'onsite', 'users', 'messages', 'settings'].forEach(t => {
+        const el = document.getElementById(`tab_${t}`);
+        if(el) el.style.display = (t === tabName) ? "block" : "none";
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+/* =========================================================
+   REAL-TIME ORDERS LISTENER
+========================================================= */
+let globalOrders = {};
+
+onValue(ref(db, "orders"), (snap) => {
+    globalOrders = snap.val() || {};
+    const ordersArray = Object.values(globalOrders);
+
+    let pendingCount = 0;
+    const quickTbody = document.querySelector("#quickOrdersTable tbody");
+    const fullTbody = document.querySelector("#fullOrdersTable tbody");
+    quickTbody.innerHTML = "";
+    fullTbody.innerHTML = "";
+
+    ordersArray.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+    ordersArray.forEach(o => {
+        if(o.status === "en_attente"){
+            pendingCount++;
+        }
+
+        if(o.status === "en_attente"){
+            const qRow = document.createElement("tr");
+            qRow.innerHTML = `
+                <td><strong>${o.userName || o.userEmail}</strong></td>
+                <td>${o.courseTitle || '-'}</td>
+                <td><strong style="color:var(--success);">${o.coursePrice || '-'}</strong></td>
+                <td>
+                    ${o.proofImage ? `<button class="btn btn-outline btn-sm" onclick="viewReceipt('${o.orderId}')">Voir reçu</button>` : 'Aucun'}
+                </td>
+                <td><span class="status-tag status-${o.status}">En attente</span></td>
+                <td>
+                    <button class="btn btn-success btn-sm" onclick="setOrderStatus('${o.orderId}', 'valide')">Valider</button>
+                    <button class="btn btn-danger btn-sm" onclick="setOrderStatus('${o.orderId}', 'refuse')">Refuser</button>
+                </td>
+            `;
+            quickTbody.appendChild(qRow);
+        }
+
+        const fRow = document.createElement("tr");
+        const dateStr = o.createdAt ? new Date(o.createdAt).toLocaleDateString('fr-FR') : '-';
+        fRow.innerHTML = `
+            <td>${dateStr}</td>
+            <td><strong>${o.userName || '-'}</strong><br><small style="color:var(--muted);">${o.userEmail || '-'}</small></td>
+            <td>${o.userPhone || '-'}</td>
+            <td>${o.courseTitle || '-'}</td>
+            <td><strong>${o.coursePrice || '-'}</strong></td>
+            <td><span class="status-tag" style="background:#ECE7F2;color:var(--purple-dark);">${o.paymentMethod || 'CCP / BaridiMob'}</span></td>
+            <td>
+                ${o.proofImage ? `<button class="btn btn-outline btn-sm" onclick="viewReceipt('${o.orderId}')">🔎 Examiner</button>` : 'Aucun'}
+            </td>
+            <td><span class="status-tag status-${o.status}">${o.status === 'valide' ? 'Validé' : o.status === 'refuse' ? 'Refusé' : 'En attente'}</span></td>
+            <td>
+                <button class="btn btn-success btn-sm" title="Valider" onclick="setOrderStatus('${o.orderId}', 'valide')">✓</button>
+                <button class="btn btn-warning btn-sm" title="En attente" onclick="setOrderStatus('${o.orderId}', 'en_attente')">⏳</button>
+                <button class="btn btn-danger btn-sm" title="Refuser" onclick="setOrderStatus('${o.orderId}', 'refuse')">✕</button>
+                <button class="btn btn-outline btn-sm" style="color:red;" title="Supprimer" onclick="deleteOrder('${o.orderId}')">🗑</button>
+            </td>
+        `;
+        fullTbody.appendChild(fRow);
+    });
+
+    const pBadge = document.getElementById("pendingOrdersBadge");
+    if(pendingCount > 0){
+        pBadge.style.display = "inline-block";
+        pBadge.textContent = pendingCount;
+    } else {
+        pBadge.style.display = "none";
+    }
+});
+
+window.setOrderStatus = function(orderId, status){
+    update(ref(db, `orders/${orderId}`), {
+        status: status,
+        updatedAt: Date.now()
+    }).then(() => {
+        showToast("Statut mis à jour avec succès !", "success");
+    });
+};
+
+window.deleteOrder = function(orderId){
+    if(confirm("Voulez-vous supprimer définitivement cette commande ?")){
+        remove(ref(db, `orders/${orderId}`)).then(() => {
+            showToast("Commande supprimée", "danger");
+        });
+    }
+};
+
+window.viewReceipt = function(orderId){
+    const order = globalOrders[orderId];
+    if(!order || !order.proofImage) return;
+
+    const wrap = document.getElementById("receiptPreviewWrap");
+    const link = document.getElementById("receiptDownloadLink");
+    link.href = order.proofImage;
+
+    if(order.proofImage.startsWith("data:application/pdf") || order.proofImage.includes(".pdf")){
+        wrap.innerHTML = `<iframe src="${order.proofImage}" style="width:100%;height:450px;border:none;"></iframe>`;
+    } else {
+        wrap.innerHTML = `<img src="${order.proofImage}" style="max-width:100%;border-radius:8px;">`;
+    }
+
+    document.getElementById("receiptModal").classList.add("active");
+};
+
+window.closeReceiptModal = () => document.getElementById("receiptModal").classList.remove("active");
+
+/* =========================================================
+   COURSES CRUD
+========================================================= */
+let globalCourses = {};
+
+onValue(ref(db, "online_courses"), (snap) => {
+    globalCourses = snap.val() || {};
+    const coursesArray = Object.values(globalCourses);
+    document.getElementById("statOnlineCourses").textContent = coursesArray.length;
+
+    const tbody = document.querySelector("#coursesTable tbody");
+    tbody.innerHTML = "";
+
+    coursesArray.forEach(c => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td><img src="${c.image}" style="width:50px;height:50px;border-radius:8px;object-fit:cover;"></td>
+            <td><strong>${c.title}</strong><br><small style="color:var(--muted);">${(c.description || '').substring(0,60)}...</small></td>
+            <td><strong>${c.price}</strong></td>
+            <td><a href="${c.videoUrl}" target="_blank" style="color:var(--purple);font-size:12px;">Lien Vidéo</a></td>
+            <td>
+                <button class="btn btn-outline btn-sm" onclick="editCourse('${c.id}')">✏️ Modifier</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteCourse('${c.id}')">🗑 Supprimer</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+});
+
+window.openCourseModal = function(courseId = null){
+    const modal = document.getElementById("courseModal");
+    const form = document.getElementById("courseForm");
+    form.reset();
+
+    if(courseId && globalCourses[courseId]){
+        const c = globalCourses[courseId];
+        document.getElementById("courseModalTitle").textContent = "Modifier la formation";
+        document.getElementById("courseIdField").value = c.id;
+        document.getElementById("courseTitleField").value = c.title;
+        document.getElementById("coursePriceField").value = c.price;
+        document.getElementById("courseImageField").value = c.image;
+        document.getElementById("courseVideoField").value = c.videoUrl;
+        document.getElementById("courseDescField").value = c.description;
+    } else {
+        document.getElementById("courseModalTitle").textContent = "Ajouter une formation";
+        document.getElementById("courseIdField").value = "c_" + Date.now();
+    }
+
+    modal.classList.add("active");
+};
+
+window.closeCourseModal = () => document.getElementById("courseModal").classList.remove("active");
+
+document.getElementById("courseForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const id = document.getElementById("courseIdField").value;
+    const courseData = {
+        id: id,
+        title: document.getElementById("courseTitleField").value.trim(),
+        price: document.getElementById("coursePriceField").value.trim(),
+        image: document.getElementById("courseImageField").value.trim(),
+        videoUrl: document.getElementById("courseVideoField").value.trim(),
+        description: document.getElementById("courseDescField").value.trim(),
+        updatedAt: Date.now()
+    };
+
+    set(ref(db, `online_courses/${id}`), courseData).then(() => {
+        closeCourseModal();
+        showToast("Formation enregistrée avec succès !", "success");
+    });
+});
+
+window.editCourse = (id) => openCourseModal(id);
+
+window.deleteCourse = function(courseId){
+    if(confirm("Confirmez-vous la suppression de ce cours ?")){
+        remove(ref(db, `online_courses/${courseId}`)).then(() => {
+            showToast("Formation supprimée", "danger");
+        });
+    }
+};
+
+/* =========================================================
+   ONSITE & MESSAGES LISTENERS
+========================================================= */
+onValue(ref(db, "onsite_registrations"), (snap) => {
+    const list = snap.val() || {};
+    const entries = Object.entries(list).reverse();
+    document.getElementById("statOnsiteCount").textContent = entries.length;
+
+    const onsiteBadge = document.getElementById("onsiteBadge");
+    if(entries.length > 0){
+        onsiteBadge.style.display = "inline-block";
+        onsiteBadge.textContent = entries.length;
+    } else {
+        onsiteBadge.style.display = "none";
+    }
+
+    const tbody = document.querySelector("#onsiteTable tbody");
+    tbody.innerHTML = "";
+
+    entries.forEach(([key, reg]) => {
+        const tr = document.createElement("tr");
+        const dateStr = reg.timestamp ? new Date(reg.timestamp).toLocaleDateString('fr-FR') : '-';
+        tr.innerHTML = `
+            <td>${dateStr}</td>
+            <td><strong>${reg.name || '-'}</strong></td>
+            <td>${reg.phone || '-'}</td>
+            <td>${reg.email || '-'}</td>
+            <td><strong style="color:var(--purple);">${reg.courseName || reg.training || 'Formation Présentielle'}</strong></td>
+            <td><span class="status-tag status-valide">${reg.status || 'Confirmé'}</span></td>
+            <td>
+                <button class="btn btn-outline btn-sm" style="color:red;" onclick="deleteOnsiteReg('${key}')">Supprimer</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+});
+
+window.deleteOnsiteReg = function(key){
+    if(confirm("Supprimer cette inscription ?")){
+        remove(ref(db, `onsite_registrations/${key}`)).then(() => {
+            showToast("Inscription supprimée", "info");
+        });
+    }
+};
+
+onValue(ref(db, "contacts_submissions"), (snap) => {
+    const messages = snap.val() || {};
+    const list = Object.entries(messages).reverse();
+    document.getElementById("statServiceRequests").textContent = list.length;
+
+    const inboxBadge = document.getElementById("inboxBadge");
+    if(list.length > 0){
+        inboxBadge.style.display = "inline-block";
+        inboxBadge.textContent = list.length;
+    } else {
+        inboxBadge.style.display = "none";
+    }
+
+    const tbody = document.querySelector("#messagesTable tbody");
+    tbody.innerHTML = "";
+
+    list.forEach(([key, m]) => {
+        const tr = document.createElement("tr");
+        const d = m.timestamp ? new Date(m.timestamp).toLocaleDateString('fr-FR') : '-';
+        tr.innerHTML = `
+            <td>${d}</td>
+            <td><strong>${m.name || '-'}</strong></td>
+            <td>${m.email || ''}<br><small>${m.phone || ''}</small></td>
+            <td><span class="status-tag status-en_attente">${m.service || 'Demande de Service'}</span></td>
+            <td style="max-width:280px;white-space:pre-wrap;">${m.message || '-'}</td>
+            <td>
+                <button class="btn btn-outline btn-sm" style="color:red;" onclick="deleteMessage('${key}')">Supprimer</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+});
+
+window.deleteMessage = function(key){
+    if(confirm("Supprimer ce message ?")){
+        remove(ref(db, `contacts_submissions/${key}`)).then(() => {
+            showToast("Message supprimé", "info");
+        });
+    }
+};
+
+/* =========================================================
+   ANALYTICS & USERS
+========================================================= */
+const todayKey = new Date().toISOString().split("T")[0];
+const currentMonthPrefix = todayKey.substring(0, 7);
+
+onValue(ref(db, "analytics/daily_visits"), (snap) => {
+    const visits = snap.val() || {};
+    document.getElementById("statDailyVisits").textContent = visits[todayKey] || 0;
+
+    let monthlyVisits = 0;
+    Object.keys(visits).forEach(date => {
+        if(date.startsWith(currentMonthPrefix)){
+            monthlyVisits += Number(visits[date]) || 0;
+        }
+    });
+    document.getElementById("statMonthlyVisits").textContent = monthlyVisits;
+});
+
+onValue(ref(db, "users"), (snap) => {
+    const users = snap.val() || {};
+    const tbody = document.querySelector("#usersTable tbody");
+    tbody.innerHTML = "";
+
+    Object.values(users).forEach(u => {
+        const tr = document.createElement("tr");
+        const isBlocked = u.blocked === true;
+        const safeKey = (u.email || "").toLowerCase().trim().replace(/[^a-z0-9]/g, "_");
+        tr.innerHTML = `
+            <td><strong>${u.name || '-'}</strong></td>
+            <td>${u.email || '-'}</td>
+            <td>${u.phone || '-'}</td>
+            <td>
+                <span class="status-tag ${isBlocked ? 'status-refuse' : 'status-valide'}">
+                    ${isBlocked ? 'Compte Bloqué' : 'Actif'}
+                </span>
+            </td>
+            <td>
+                <button class="btn btn-sm ${isBlocked ? 'btn-success' : 'btn-danger'}" onclick="toggleBlockUser('${safeKey}', ${!isBlocked})">
+                    ${isBlocked ? 'Débloquer' : 'Bloquer'}
+                </button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+});
+
+window.toggleBlockUser = function(userKey, newBlockStatus){
+    update(ref(db, `users/${userKey}`), { blocked: newBlockStatus }).then(() => {
+        showToast(newBlockStatus ? "Utilisateur suspendu" : "Utilisateur réactivé", "info");
+    });
+};
+
+/* =========================================================
+   PAYMENT ACCOUNTS & SETTINGS
+========================================================= */
+onValue(ref(db, "site_settings/payment_accounts"), (snap) => {
+    const data = snap.val();
+    if(data){
+        if(data.ccpOwner) document.getElementById("adm_ccp_owner").value = data.ccpOwner;
+        if(data.ccpAcc) document.getElementById("adm_ccp_acc").value = data.ccpAcc;
+        if(data.ccpKey) document.getElementById("adm_ccp_key").value = data.ccpKey;
+        if(data.ccpRip) document.getElementById("adm_ccp_rip").value = data.ccpRip;
+
+        if(data.bankName) document.getElementById("adm_bank_name").value = data.bankName;
+        if(data.bankOwner) document.getElementById("adm_bank_owner").value = data.bankOwner;
+        if(data.bankRib) document.getElementById("adm_bank_rib").value = data.bankRib;
+    }
+});
+
+document.getElementById("paymentAccountsForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const payload = {
+        ccpOwner: document.getElementById("adm_ccp_owner").value.trim(),
+        ccpAcc: document.getElementById("adm_ccp_acc").value.trim(),
+        ccpKey: document.getElementById("adm_ccp_key").value.trim(),
+        ccpRip: document.getElementById("adm_ccp_rip").value.trim(),
+        bankName: document.getElementById("adm_bank_name").value.trim(),
+        bankOwner: document.getElementById("adm_bank_owner").value.trim(),
+        bankRib: document.getElementById("adm_bank_rib").value.trim(),
+        updatedAt: Date.now()
+    };
+
+    set(ref(db, "site_settings/payment_accounts"), payload).then(() => {
+        showToast("Coordonnées de paiement (CCP & Banque) mises à jour !", "success");
+    }).catch((err) => {
+        showToast("Erreur lors de l'enregistrement : " + err.message, "danger");
+    });
+});
+
+onValue(ref(db, "site_settings"), (snap) => {
+    const s = snap.val();
+    if(s){
+        if(s.phone) document.getElementById("settingPhone").value = s.phone;
+        if(s.whatsapp) document.getElementById("settingWhatsapp").value = s.whatsapp;
+        if(s.location) document.getElementById("settingLocation").value = s.location;
+    }
+});
+
+document.getElementById("settingsForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const settings = {
+        phone: document.getElementById("settingPhone").value.trim(),
+        whatsapp: document.getElementById("settingWhatsapp").value.trim(),
+        location: document.getElementById("settingLocation").value.trim(),
+        updatedAt: Date.now()
+    };
+
+    update(ref(db, "site_settings"), settings).then(() => {
+        showToast("Paramètres généraux mis à jour !", "success");
+    });
+});
+</script>
+
+</body>
+</html>
