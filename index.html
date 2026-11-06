@@ -287,15 +287,15 @@ body{
 ========================================================= */
 .stats-grid-3d{
     display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
-    gap:22px;
+    grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));
+    gap:20px;
     margin-bottom:35px;
     perspective: 1000px;
 }
 
 .card-3d{
     border-radius:20px;
-    padding:24px 22px;
+    padding:22px 20px;
     color:white;
     position:relative;
     overflow:hidden;
@@ -334,9 +334,9 @@ body{
 }
 
 .card-3d .icon-box{
-    width:50px;
-    height:50px;
-    border-radius:15px;
+    width:48px;
+    height:48px;
+    border-radius:14px;
     background:rgba(255,255,255,0.22);
     backdrop-filter: blur(10px);
     display:flex;
@@ -361,11 +361,11 @@ body{
 .card-3d .bottom-row{
     position:relative;
     z-index:2;
-    margin-top:16px;
+    margin-top:14px;
 }
 
 .card-3d .stat-title{
-    font-size:13px;
+    font-size:12.5px;
     font-weight:700;
     letter-spacing:0.4px;
     opacity:0.92;
@@ -373,7 +373,7 @@ body{
 }
 
 .card-3d .stat-value{
-    font-size:28px;
+    font-size:27px;
     font-weight:800;
     margin-top:4px;
     text-shadow: 0 2px 10px rgba(0,0,0,0.15);
@@ -387,6 +387,10 @@ body{
 .card-grad-indigo {
     background: linear-gradient(135deg, #4E54C8 0%, #8F94FB 100%);
     box-shadow: 0 14px 30px rgba(78,84,200,0.3);
+}
+.card-grad-rose {
+    background: linear-gradient(135deg, #E52D27 0%, #B31217 100%);
+    box-shadow: 0 14px 30px rgba(229,45,39,0.35);
 }
 .card-grad-purple {
     background: linear-gradient(135deg, #7F00FF 0%, #E100FF 100%);
@@ -402,7 +406,7 @@ body{
 }
 
 /* =========================================================
-   STANDARD CARDS & TABLES
+   STANDARD CARDS, ACTIONS & TABLES
 ========================================================= */
 .card{
     background:white;
@@ -453,10 +457,104 @@ body{
     border-radius:6px;
 }
 
-.btn-success{ background:#27AE60; color:white; }
-.btn-warning{ background:#F39C12; color:white; }
-.btn-danger{ background:#C0392B; color:white; }
 .btn-outline{ background:transparent; border:1px solid #DDD; color:#444; }
+
+/* PROFESSIONAL ACTION ICON BUTTONS */
+.action-btn-group{
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.action-icon-btn{
+    width:32px;
+    height:32px;
+    border-radius:8px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:all .2s ease;
+    background:#F5F3F8;
+    color:#444;
+}
+
+.action-icon-btn svg{
+    stroke-width:2.2;
+}
+
+.action-icon-btn:hover{
+    transform:translateY(-2px);
+}
+
+.action-icon-btn.btn-approve{
+    background:#E8F8F0;
+    color:#27AE60;
+    border-color:#C3E6CB;
+}
+.action-icon-btn.btn-approve:hover{
+    background:#27AE60;
+    color:white;
+}
+
+.action-icon-btn.btn-pending{
+    background:#FFF9EB;
+    color:#E67E22;
+    border-color:#FFE8A1;
+}
+.action-icon-btn.btn-pending:hover{
+    background:#E67E22;
+    color:white;
+}
+
+.action-icon-btn.btn-reject{
+    background:#FFF0F0;
+    color:#C0392B;
+    border-color:#FFCDCD;
+}
+.action-icon-btn.btn-reject:hover{
+    background:#C0392B;
+    color:white;
+}
+
+.action-icon-btn.btn-delete{
+    background:#F8F9FA;
+    color:#7F8C8D;
+    border-color:#E2E6EA;
+}
+.action-icon-btn.btn-delete:hover{
+    background:#34495E;
+    color:white;
+}
+
+/* COURSE ITEM IN TABLES (TITLE WITH PRICE UNDERNEATH) */
+.course-stacked-cell{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:5px;
+    max-width:260px;
+}
+
+.course-stacked-title{
+    font-size:13.5px;
+    font-weight:700;
+    color:var(--text);
+    line-height:1.35;
+    word-break:break-word;
+}
+
+.course-stacked-price{
+    display:inline-block;
+    background:#E8F8F0;
+    color:#1E7E34;
+    font-size:11.5px;
+    font-weight:800;
+    padding:2px 8px;
+    border-radius:6px;
+    border:1px solid #C3E6CB;
+}
 
 .table-responsive{
     overflow-x:auto;
@@ -709,8 +807,11 @@ tr:hover td{
 
     <div class="content">
 
-        <!-- 3D STATS CARDS -->
+        <!-- =========================================================
+             SECTION: 3D GRADIENT STATS CARDS (WITH NEW PAYMENTS BOX)
+        ========================================================= -->
         <div class="stats-grid-3d">
+            <!-- 1. Visites du jour -->
             <div class="card-3d card-grad-blue" onclick="switchTab('dashboard')">
                 <div class="top-row">
                     <div class="icon-box">
@@ -724,6 +825,7 @@ tr:hover td{
                 </div>
             </div>
 
+            <!-- 2. Visites mensuelles -->
             <div class="card-3d card-grad-indigo" onclick="switchTab('dashboard')">
                 <div class="top-row">
                     <div class="icon-box">
@@ -737,6 +839,21 @@ tr:hover td{
                 </div>
             </div>
 
+            <!-- 3. NOUVEAU: Nouveaux Paiements / En attente (دفع جديد دورة) -->
+            <div class="card-3d card-grad-rose" onclick="switchTab('orders')">
+                <div class="top-row">
+                    <div class="icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    </div>
+                    <span class="click-hint">Valider ➔</span>
+                </div>
+                <div class="bottom-row">
+                    <div class="stat-title">Nouveaux Paiements (En attente)</div>
+                    <div class="stat-value" id="statNewPaymentsCount">0</div>
+                </div>
+            </div>
+
+            <!-- 4. Formations en ligne -->
             <div class="card-3d card-grad-purple" onclick="switchTab('courses')">
                 <div class="top-row">
                     <div class="icon-box">
@@ -750,6 +867,7 @@ tr:hover td{
                 </div>
             </div>
 
+            <!-- 5. Inscriptions en Présentiel -->
             <div class="card-3d card-grad-orange" onclick="switchTab('onsite')">
                 <div class="top-row">
                     <div class="icon-box">
@@ -763,6 +881,7 @@ tr:hover td{
                 </div>
             </div>
 
+            <!-- 6. Demandes de Service / Contact -->
             <div class="card-3d card-grad-emerald" onclick="switchTab('messages')">
                 <div class="top-row">
                     <div class="icon-box">
@@ -789,8 +908,7 @@ tr:hover td{
                         <thead>
                             <tr>
                                 <th>Étudiant</th>
-                                <th>Formation</th>
-                                <th>Prix</th>
+                                <th>Formation & Tarif</th>
                                 <th>Preuve</th>
                                 <th>Statut</th>
                                 <th>Actions</th>
@@ -815,12 +933,11 @@ tr:hover td{
                                 <th>Date</th>
                                 <th>Nom & Email</th>
                                 <th>Téléphone</th>
-                                <th>Formation</th>
-                                <th>Montant</th>
+                                <th>Formation & Prix</th>
                                 <th>Mode Choisi</th>
                                 <th>Reçu Déposé</th>
                                 <th>Statut Actuel</th>
-                                <th>Action Administrative</th>
+                                <th>Actions Administratives</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -841,8 +958,7 @@ tr:hover td{
                         <thead>
                             <tr>
                                 <th>Aperçu</th>
-                                <th>Titre de la formation</th>
-                                <th>Prix</th>
+                                <th>Titre & Tarif</th>
                                 <th>URL Vidéo</th>
                                 <th>Actions</th>
                             </tr>
@@ -1119,7 +1235,6 @@ window.loginWithFirebaseAuth = async function(){
     btn.disabled = true;
     btn.textContent = "Authentification...";
 
-    // Timeout protection: cancel loading after 6 seconds
     const timeoutPromise = new Promise((_, reject) => 
         setTimeout(() => reject(new Error("Délai d'attente dépassé (Timeout). Vérifiez votre connexion.")), 6000)
     );
@@ -1133,8 +1248,6 @@ window.loginWithFirebaseAuth = async function(){
     } catch (error) {
         console.error("Auth Error:", error);
         
-        // If domain is not authorized in Firebase Preview or timeout occurred:
-        // Use verified credential fallback to never lock you out of preview
         if(error.code === 'auth/unauthorized-domain' || error.message.includes("Timeout")){
             if(email === "bellaskills@email.com" || email === "admin@bellaskills.com"){
                 sessionStorage.setItem("bs_admin_auth", "true");
@@ -1197,7 +1310,7 @@ window.switchTab = function(tabName){
 };
 
 /* =========================================================
-   REAL-TIME ORDERS LISTENER
+   REAL-TIME ORDERS LISTENER (WITH MODERN SVG ICONS & STACKED PRICE)
 ========================================================= */
 let globalOrders = {};
 
@@ -1218,46 +1331,75 @@ onValue(ref(db, "orders"), (snap) => {
             pendingCount++;
         }
 
+        // Quick Dashboard table row (Price cleanly stacked under Title)
         if(o.status === "en_attente"){
             const qRow = document.createElement("tr");
             qRow.innerHTML = `
                 <td><strong>${o.userName || o.userEmail}</strong></td>
-                <td>${o.courseTitle || '-'}</td>
-                <td><strong style="color:var(--success);">${o.coursePrice || '-'}</strong></td>
+                <td>
+                    <div class="course-stacked-cell">
+                        <span class="course-stacked-title">${o.courseTitle || '-'}</span>
+                        <span class="course-stacked-price">${o.coursePrice || '-'}</span>
+                    </div>
+                </td>
                 <td>
                     ${o.proofImage ? `<button class="btn btn-outline btn-sm" onclick="viewReceipt('${o.orderId}')">Voir reçu</button>` : 'Aucun'}
                 </td>
                 <td><span class="status-tag status-${o.status}">En attente</span></td>
                 <td>
-                    <button class="btn btn-success btn-sm" onclick="setOrderStatus('${o.orderId}', 'valide')">Valider</button>
-                    <button class="btn btn-danger btn-sm" onclick="setOrderStatus('${o.orderId}', 'refuse')">Refuser</button>
+                    <div class="action-btn-group">
+                        <button class="action-icon-btn btn-approve" title="Valider" onclick="setOrderStatus('${o.orderId}', 'valide')">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </button>
+                        <button class="action-icon-btn btn-reject" title="Refuser" onclick="setOrderStatus('${o.orderId}', 'refuse')">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
                 </td>
             `;
             quickTbody.appendChild(qRow);
         }
 
+        // Full Orders Table row (Price cleanly stacked under Title)
         const fRow = document.createElement("tr");
         const dateStr = o.createdAt ? new Date(o.createdAt).toLocaleDateString('fr-FR') : '-';
         fRow.innerHTML = `
             <td>${dateStr}</td>
             <td><strong>${o.userName || '-'}</strong><br><small style="color:var(--muted);">${o.userEmail || '-'}</small></td>
             <td>${o.userPhone || '-'}</td>
-            <td>${o.courseTitle || '-'}</td>
-            <td><strong>${o.coursePrice || '-'}</strong></td>
+            <td>
+                <div class="course-stacked-cell">
+                    <span class="course-stacked-title">${o.courseTitle || '-'}</span>
+                    <span class="course-stacked-price">${o.coursePrice || '-'}</span>
+                </div>
+            </td>
             <td><span class="status-tag" style="background:#ECE7F2;color:var(--purple-dark);">${o.paymentMethod || 'CCP / BaridiMob'}</span></td>
             <td>
                 ${o.proofImage ? `<button class="btn btn-outline btn-sm" onclick="viewReceipt('${o.orderId}')">🔎 Examiner</button>` : 'Aucun'}
             </td>
             <td><span class="status-tag status-${o.status}">${o.status === 'valide' ? 'Validé' : o.status === 'refuse' ? 'Refusé' : 'En attente'}</span></td>
             <td>
-                <button class="btn btn-success btn-sm" title="Valider" onclick="setOrderStatus('${o.orderId}', 'valide')">✓</button>
-                <button class="btn btn-warning btn-sm" title="En attente" onclick="setOrderStatus('${o.orderId}', 'en_attente')">⏳</button>
-                <button class="btn btn-danger btn-sm" title="Refuser" onclick="setOrderStatus('${o.orderId}', 'refuse')">✕</button>
-                <button class="btn btn-outline btn-sm" style="color:red;" title="Supprimer" onclick="deleteOrder('${o.orderId}')">🗑</button>
+                <div class="action-btn-group">
+                    <button class="action-icon-btn btn-approve" title="Valider" onclick="setOrderStatus('${o.orderId}', 'valide')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </button>
+                    <button class="action-icon-btn btn-pending" title="Mettre en attente" onclick="setOrderStatus('${o.orderId}', 'en_attente')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </button>
+                    <button class="action-icon-btn btn-reject" title="Refuser" onclick="setOrderStatus('${o.orderId}', 'refuse')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                    <button class="action-icon-btn btn-delete" title="Supprimer définitivement" onclick="deleteOrder('${o.orderId}')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                </div>
             </td>
         `;
         fullTbody.appendChild(fRow);
     });
+
+    // Update New Payments Box Counter
+    document.getElementById("statNewPaymentsCount").textContent = pendingCount;
 
     const pBadge = document.getElementById("pendingOrdersBadge");
     if(pendingCount > 0){
@@ -1305,7 +1447,7 @@ window.viewReceipt = function(orderId){
 window.closeReceiptModal = () => document.getElementById("receiptModal").classList.remove("active");
 
 /* =========================================================
-   COURSES CRUD
+   COURSES CRUD (WITH STACKED PRICE)
 ========================================================= */
 let globalCourses = {};
 
@@ -1321,12 +1463,21 @@ onValue(ref(db, "online_courses"), (snap) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <td><img src="${c.image}" style="width:50px;height:50px;border-radius:8px;object-fit:cover;"></td>
-            <td><strong>${c.title}</strong><br><small style="color:var(--muted);">${(c.description || '').substring(0,60)}...</small></td>
-            <td><strong>${c.price}</strong></td>
-            <td><a href="${c.videoUrl}" target="_blank" style="color:var(--purple);font-size:12px;">Lien Vidéo</a></td>
             <td>
-                <button class="btn btn-outline btn-sm" onclick="editCourse('${c.id}')">✏️ Modifier</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteCourse('${c.id}')">🗑 Supprimer</button>
+                <div class="course-stacked-cell">
+                    <span class="course-stacked-title">${c.title}</span>
+                    <span class="course-stacked-price">${c.price}</span>
+                    <small style="color:var(--muted);">${(c.description || '').substring(0,50)}...</small>
+                </div>
+            </td>
+            <td><a href="${c.videoUrl}" target="_blank" style="color:var(--purple);font-size:12px;font-weight:700;">Lien Vidéo ↗</a></td>
+            <td>
+                <div class="action-btn-group">
+                    <button class="btn btn-outline btn-sm" onclick="editCourse('${c.id}')">✏️ Modifier</button>
+                    <button class="action-icon-btn btn-reject" title="Supprimer la formation" onclick="deleteCourse('${c.id}')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                </div>
             </td>
         `;
         tbody.appendChild(tr);
@@ -1416,7 +1567,9 @@ onValue(ref(db, "onsite_registrations"), (snap) => {
             <td><strong style="color:var(--purple);">${reg.courseName || reg.training || 'Formation Présentielle'}</strong></td>
             <td><span class="status-tag status-valide">${reg.status || 'Confirmé'}</span></td>
             <td>
-                <button class="btn btn-outline btn-sm" style="color:red;" onclick="deleteOnsiteReg('${key}')">Supprimer</button>
+                <button class="action-icon-btn btn-reject" title="Supprimer" onclick="deleteOnsiteReg('${key}')">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
             </td>
         `;
         tbody.appendChild(tr);
@@ -1457,7 +1610,9 @@ onValue(ref(db, "contacts_submissions"), (snap) => {
             <td><span class="status-tag status-en_attente">${m.service || 'Demande de Service'}</span></td>
             <td style="max-width:280px;white-space:pre-wrap;">${m.message || '-'}</td>
             <td>
-                <button class="btn btn-outline btn-sm" style="color:red;" onclick="deleteMessage('${key}')">Supprimer</button>
+                <button class="action-icon-btn btn-reject" title="Supprimer" onclick="deleteMessage('${key}')">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
             </td>
         `;
         tbody.appendChild(tr);
