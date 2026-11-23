@@ -70,6 +70,7 @@ body{
     border-radius:14px;
     margin-bottom:16px;
     object-fit:cover;
+    display:inline-block;
 }
 
 .login-card h2{
@@ -89,7 +90,7 @@ body{
    LAYOUT (SIDEBAR + MAIN CONTENT)
 ========================================================= */
 .sidebar{
-    width:270px;
+    width:275px;
     background:var(--purple-dark);
     color:white;
     display:flex;
@@ -103,7 +104,7 @@ body{
 }
 
 .sidebar-header{
-    padding:26px 22px;
+    padding:24px 20px;
     display:flex;
     align-items:center;
     gap:12px;
@@ -132,10 +133,10 @@ body{
 }
 
 .sidebar-nav{
-    padding:20px 14px;
+    padding:16px 14px;
     display:flex;
     flex-direction:column;
-    gap:6px;
+    gap:5px;
     flex-grow:1;
     overflow-y:auto;
 }
@@ -143,10 +144,10 @@ body{
 .nav-item{
     display:flex;
     align-items:center;
-    gap:12px;
-    padding:12px 16px;
-    color:rgba(255,255,255,.75);
-    font-size:13.5px;
+    gap:11px;
+    padding:11px 14px;
+    color:rgba(255,255,255,.78);
+    font-size:13px;
     font-weight:600;
     border-radius:12px;
     cursor:pointer;
@@ -179,7 +180,7 @@ body{
 }
 
 .sidebar-footer{
-    padding:20px 16px;
+    padding:18px 16px;
     border-top:1px solid rgba(255,255,255,.08);
 }
 
@@ -379,7 +380,6 @@ body{
     text-shadow: 0 2px 10px rgba(0,0,0,0.15);
 }
 
-/* GRADIENTS */
 .card-grad-blue {
     background: linear-gradient(135deg, #1A73E8 0%, #00C6FF 100%);
     box-shadow: 0 14px 30px rgba(26,115,232,0.3);
@@ -421,6 +421,8 @@ body{
     display:flex;
     justify-content:space-between;
     align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
     margin-bottom:20px;
 }
 
@@ -458,12 +460,14 @@ body{
 }
 
 .btn-outline{ background:transparent; border:1px solid #DDD; color:#444; }
+.btn-success{ background:#27AE60; color:white; }
+.btn-danger{ background:#C0392B; color:white; }
 
-/* PROFESSIONAL ACTION ICON BUTTONS */
 .action-btn-group{
     display:flex;
     align-items:center;
     gap:6px;
+    flex-wrap:wrap;
 }
 
 .action-icon-btn{
@@ -528,13 +532,12 @@ body{
     color:white;
 }
 
-/* COURSE ITEM IN TABLES (TITLE WITH PRICE UNDERNEATH) */
 .course-stacked-cell{
     display:flex;
     flex-direction:column;
     align-items:flex-start;
     gap:5px;
-    max-width:260px;
+    max-width:280px;
 }
 
 .course-stacked-title{
@@ -554,6 +557,16 @@ body{
     padding:2px 8px;
     border-radius:6px;
     border:1px solid #C3E6CB;
+}
+
+.spec-pill{
+    display:inline-block;
+    background:var(--purple-soft);
+    color:var(--purple-dark);
+    font-size:10.5px;
+    font-weight:700;
+    padding:2px 8px;
+    border-radius:6px;
 }
 
 .table-responsive{
@@ -598,7 +611,6 @@ tr:hover td{
 .status-en_attente{ background:#FFF3CD; color:#856404; }
 .status-refuse{ background:#F8D7DA; color:#721C24; }
 
-/* FORMS & MODALS */
 .form-group{
     margin-bottom:16px;
 }
@@ -649,7 +661,7 @@ tr:hover td{
 
 .modal-box{
     background:white;
-    width:min(580px, 100%);
+    width:min(620px, 100%);
     max-height:90vh;
     overflow-y:auto;
     border-radius:20px;
@@ -669,7 +681,6 @@ tr:hover td{
     cursor:pointer;
 }
 
-/* TOASTS */
 .toast-wrap{
     position:fixed;
     top:20px;
@@ -718,7 +729,7 @@ tr:hover td{
         <form id="adminLoginForm" onsubmit="event.preventDefault(); window.loginWithFirebaseAuth();">
             <div class="form-group" style="text-align:left;">
                 <label>Email Administrateur</label>
-                <input type="email" id="adminEmailInput" placeholder="bellaskills@email.com" required autofocus>
+                <input type="email" id="adminEmailInput" placeholder="chimiebella.success@gmail.com" required autofocus>
             </div>
             <div class="form-group" style="text-align:left;">
                 <label>Mot de passe</label>
@@ -760,6 +771,21 @@ tr:hover td{
             Formations & E-Learning
         </button>
 
+        <button class="nav-item" id="nav_partners" onclick="switchTab('partners')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Partenaires & Logos
+        </button>
+
+        <button class="nav-item" id="nav_events" onclick="switchTab('events')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Événements & Galerie
+        </button>
+
+        <button class="nav-item" id="nav_references" onclick="switchTab('references')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Clients & Références
+        </button>
+
         <button class="nav-item" id="nav_onsite" onclick="switchTab('onsite')">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 7v14M21 7v14M6 11h12M6 15h12M9 3l3 4 3-4"></path></svg>
             Inscriptions Présentiel
@@ -779,7 +805,7 @@ tr:hover td{
 
         <button class="nav-item" id="nav_settings" onclick="switchTab('settings')">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            Paramètres & Coordonnées
+            Contenu, Fondatrice & Paiements
         </button>
     </nav>
 
@@ -808,10 +834,9 @@ tr:hover td{
     <div class="content">
 
         <!-- =========================================================
-             SECTION: 3D GRADIENT STATS CARDS (WITH NEW PAYMENTS BOX)
+             SECTION: 3D GRADIENT STATS CARDS
         ========================================================= -->
         <div class="stats-grid-3d">
-            <!-- 1. Visites du jour -->
             <div class="card-3d card-grad-blue" onclick="switchTab('dashboard')">
                 <div class="top-row">
                     <div class="icon-box">
@@ -825,7 +850,6 @@ tr:hover td{
                 </div>
             </div>
 
-            <!-- 2. Visites mensuelles -->
             <div class="card-3d card-grad-indigo" onclick="switchTab('dashboard')">
                 <div class="top-row">
                     <div class="icon-box">
@@ -839,7 +863,6 @@ tr:hover td{
                 </div>
             </div>
 
-            <!-- 3. NOUVEAU: Nouveaux Paiements / En attente (دفع جديد دورة) -->
             <div class="card-3d card-grad-rose" onclick="switchTab('orders')">
                 <div class="top-row">
                     <div class="icon-box">
@@ -853,7 +876,6 @@ tr:hover td{
                 </div>
             </div>
 
-            <!-- 4. Formations en ligne -->
             <div class="card-3d card-grad-purple" onclick="switchTab('courses')">
                 <div class="top-row">
                     <div class="icon-box">
@@ -867,21 +889,19 @@ tr:hover td{
                 </div>
             </div>
 
-            <!-- 5. Inscriptions en Présentiel -->
-            <div class="card-3d card-grad-orange" onclick="switchTab('onsite')">
+            <div class="card-3d card-grad-orange" onclick="switchTab('partners')">
                 <div class="top-row">
                     <div class="icon-box">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     </div>
-                    <span class="click-hint">Consulter ➔</span>
+                    <span class="click-hint">Partenaires ➔</span>
                 </div>
                 <div class="bottom-row">
-                    <div class="stat-title">Inscriptions Présentiel</div>
-                    <div class="stat-value" id="statOnsiteCount">0</div>
+                    <div class="stat-title">Partenaires & Logos</div>
+                    <div class="stat-value" id="statPartnersCount">3</div>
                 </div>
             </div>
 
-            <!-- 6. Demandes de Service / Contact -->
             <div class="card-3d card-grad-emerald" onclick="switchTab('messages')">
                 <div class="top-row">
                     <div class="icon-box">
@@ -950,7 +970,7 @@ tr:hover td{
         <section id="tab_courses" style="display:none;">
             <div class="card">
                 <div class="card-header">
-                    <h3>Catalogue des Formations en Ligne</h3>
+                    <h3>Catalogue des Formations en Ligne (Par Spécialité)</h3>
                     <button class="btn btn-primary" onclick="openCourseModal()">+ Ajouter une formation</button>
                 </div>
                 <div class="table-responsive">
@@ -958,8 +978,79 @@ tr:hover td{
                         <thead>
                             <tr>
                                 <th>Aperçu</th>
-                                <th>Titre & Tarif</th>
+                                <th>Spécialité, Titre & Tarif</th>
                                 <th>URL Vidéo</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: PARTNERS & INSTITUTION LOGOS CMS -->
+        <section id="tab_partners" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Partenaires & Logos des Institutions</h3>
+                    <button class="btn btn-primary" onclick="openPartnerModal()">+ Ajouter un partenaire / logo</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="partnersTable">
+                        <thead>
+                            <tr>
+                                <th>Logo</th>
+                                <th>Institution / Partenaire</th>
+                                <th>Domaine</th>
+                                <th>Site Web</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: EVENTS CMS -->
+        <section id="tab_events" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Événements en Images (Ateliers, Conférences, Journées, Networking)</h3>
+                    <button class="btn btn-primary" onclick="openEventModal()">+ Ajouter un événement</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="eventsTable">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Événement</th>
+                                <th>Catégorie</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: REFERENCES CMS -->
+        <section id="tab_references" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Ils nous ont fait confiance — Clients & Références</h3>
+                    <button class="btn btn-primary" onclick="openReferenceModal()">+ Ajouter une référence</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="referencesTable">
+                        <thead>
+                            <tr>
+                                <th>Catégorie</th>
+                                <th>Client / Référence</th>
+                                <th>Description</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -1041,8 +1132,46 @@ tr:hover td{
             </div>
         </section>
 
-        <!-- TAB 6: SETTINGS (PAYMENTS & CONTACTS) -->
+        <!-- TAB 6: SETTINGS (FOUNDER, IMAGES, PAYMENTS & CONTACTS) -->
         <section id="tab_settings" style="display:none;">
+            <!-- FONDATRICE & VISUELS DU SITE -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Fondatrice (Lynda Ahmed BGD) & Visuels du Site</h3>
+                </div>
+                <form id="founderCmsForm">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Nom de la Fondatrice</label>
+                            <input type="text" id="adm_founder_name" value="Lynda Ahmed BGD" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Titre / Poste</label>
+                            <input type="text" id="adm_founder_role" value="Fondatrice et CEO de BellaSkills Hub" required>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>URL Image Section Qui sommes-nous</label>
+                            <input type="url" id="adm_intro_image" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>URL Image Section À propos</label>
+                            <input type="url" id="adm_about_image" placeholder="https://...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Parcours & Biographie (Paragraphe 1)</label>
+                        <textarea id="adm_founder_bio1" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Expérience Internationale & Entrepreneuriat (Paragraphe 2)</label>
+                        <textarea id="adm_founder_bio3" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enregistrer Fondatrice & Visuels</button>
+                </form>
+            </div>
+
             <!-- GESTION DES COORDONNÉES DE PAIEMENT (CCP & BANQUE) -->
             <div class="card">
                 <div class="card-header">
@@ -1053,7 +1182,7 @@ tr:hover td{
                     <div class="grid-2">
                         <div class="form-group">
                             <label>Titulaire du Compte CCP</label>
-                            <input type="text" id="adm_ccp_owner" placeholder="Bella Skills HUB" required>
+                            <input type="text" id="adm_ccp_owner" placeholder="BellaSkills Hub" required>
                         </div>
                         <div class="form-group">
                             <label>Numéro de Compte CCP</label>
@@ -1081,7 +1210,7 @@ tr:hover td{
                         </div>
                         <div class="form-group">
                             <label>Titulaire du Compte Bancaire</label>
-                            <input type="text" id="adm_bank_owner" placeholder="SARL Bella Skills HUB" required>
+                            <input type="text" id="adm_bank_owner" placeholder="BellaSkills Hub" required>
                         </div>
                     </div>
                     <div class="form-group">
@@ -1127,12 +1256,22 @@ tr:hover td{
         <form id="courseForm">
             <input type="hidden" id="courseIdField">
             <div class="form-group">
+                <label>Spécialité / Univers</label>
+                <input type="text" id="courseSpecialtyField" required placeholder="ex: Soft Skills & Développement du Potentiel Humain">
+            </div>
+            <div class="form-group">
                 <label>Titre de la Formation</label>
                 <input type="text" id="courseTitleField" required placeholder="ex: Formation Complète Soft Skills">
             </div>
-            <div class="form-group">
-                <label>Prix (en DZD)</label>
-                <input type="text" id="coursePriceField" required placeholder="ex: 12 000 DZD">
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Prix (en DZD)</label>
+                    <input type="text" id="coursePriceField" required placeholder="ex: 12 000 DZD">
+                </div>
+                <div class="form-group">
+                    <label>Slug / Lien personnalisé</label>
+                    <input type="text" id="courseSlugField" placeholder="ex: marketing03">
+                </div>
             </div>
             <div class="form-group">
                 <label>URL de l'image de couverture</label>
@@ -1147,6 +1286,101 @@ tr:hover td{
                 <textarea id="courseDescField" rows="3" required placeholder="Description détaillée du programme..."></textarea>
             </div>
             <button type="submit" class="btn btn-primary" style="width:100%;">Enregistrer la formation</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL: PARTNER & INSTITUTION LOGO -->
+<div class="modal-overlay" id="partnerModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closePartnerModal()">✕</button>
+        <h3 id="partnerModalTitle" style="color:var(--purple-dark);margin-bottom:18px;">Ajouter un partenaire / logo</h3>
+        <form id="partnerForm">
+            <input type="hidden" id="partnerIdField">
+            <div class="form-group">
+                <label>Nom de l'institution / Partenaire</label>
+                <input type="text" id="partnerNameField" required placeholder="ex: ChimieBella Consulting">
+            </div>
+            <div class="form-group">
+                <label>Domaine d'expertise</label>
+                <input type="text" id="partnerDomainField" required placeholder="ex: Conseil & Stratégie d'Entreprise">
+            </div>
+            <div class="form-group">
+                <label>URL du Logo de l'institution (Image)</label>
+                <input type="url" id="partnerLogoField" placeholder="https://...">
+            </div>
+            <div class="form-group">
+                <label>Lien du site web (optionnel)</label>
+                <input type="url" id="partnerWebsiteField" placeholder="https://...">
+            </div>
+            <div class="form-group">
+                <label>Courte présentation</label>
+                <textarea id="partnerDescField" rows="3" required placeholder="Présentation de la collaboration..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Enregistrer le partenaire</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL: EVENT -->
+<div class="modal-overlay" id="eventModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeEventModal()">✕</button>
+        <h3 id="eventModalTitle" style="color:var(--purple-dark);margin-bottom:18px;">Ajouter un événement</h3>
+        <form id="eventForm">
+            <input type="hidden" id="eventIdField">
+            <div class="form-group">
+                <label>Titre de l'événement</label>
+                <input type="text" id="eventTitleField" required placeholder="ex: Conférence Soft Skills">
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Catégorie</label>
+                    <select id="eventCategoryField">
+                        <option value="Ateliers et formations">Ateliers et formations</option>
+                        <option value="Conférences et séminaires">Conférences et séminaires</option>
+                        <option value="Événements professionnels et scientifiques">Événements professionnels et scientifiques</option>
+                        <option value="Rencontres et networking">Rencontres et networking</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date (YYYY-MM-DD)</label>
+                    <input type="date" id="eventDateField" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>URL de l'image</label>
+                <input type="url" id="eventImageField" required placeholder="https://images.unsplash.com/...">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="eventDescField" rows="3" required placeholder="Résumé de l'événement..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Enregistrer l'événement</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL: REFERENCE -->
+<div class="modal-overlay" id="referenceModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeReferenceModal()">✕</button>
+        <h3 id="referenceModalTitle" style="color:var(--purple-dark);margin-bottom:18px;">Ajouter une référence client</h3>
+        <form id="referenceForm">
+            <input type="hidden" id="referenceIdField">
+            <div class="form-group">
+                <label>Badge / Secteur</label>
+                <input type="text" id="referenceBadgeField" required placeholder="ex: Entreprises & Industrie">
+            </div>
+            <div class="form-group">
+                <label>Titre / Client</label>
+                <input type="text" id="referenceTitleField" required placeholder="ex: Sociétés Industrielles & Commerciales">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="referenceDescField" rows="3" required placeholder="Détails de l'accompagnement..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Enregistrer la référence</button>
         </form>
     </div>
 </div>
@@ -1188,7 +1422,6 @@ const auth = getAuth(app);
 
 const loginGate = document.getElementById("loginGate");
 
-/* Toast */
 window.showToast = function(msg, type="info"){
     const wrap = document.getElementById("toastWrap");
     const t = document.createElement("div");
@@ -1200,13 +1433,11 @@ window.showToast = function(msg, type="info"){
     setTimeout(() => { t.remove(); }, 4000);
 };
 
-// Check local storage fallback session
 if(sessionStorage.getItem("bs_admin_auth") === "true"){
     loginGate.style.display = "none";
     document.getElementById("sidebarUserEmail").textContent = sessionStorage.getItem("bs_admin_email") || "Admin Connecté";
 }
 
-// Monitor authentication state
 onAuthStateChanged(auth, (user) => {
     if (user) {
         sessionStorage.setItem("bs_admin_auth", "true");
@@ -1221,7 +1452,6 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// Login with timeout protection and domain error bypass
 window.loginWithFirebaseAuth = async function(){
     const email = document.getElementById("adminEmailInput").value.trim().toLowerCase();
     const password = document.getElementById("adminPasswordInput").value.trim();
@@ -1236,7 +1466,7 @@ window.loginWithFirebaseAuth = async function(){
     btn.textContent = "Authentification...";
 
     const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error("Délai d'attente dépassé (Timeout). Vérifiez votre connexion.")), 6000)
+        setTimeout(() => reject(new Error("Délai d'attente dépassé (Timeout).")), 15000)
     );
 
     try {
@@ -1247,25 +1477,34 @@ window.loginWithFirebaseAuth = async function(){
         showToast("Connexion réussie !", "success");
     } catch (error) {
         console.error("Auth Error:", error);
-        
-        if(error.code === 'auth/unauthorized-domain' || error.message.includes("Timeout")){
-            if(email === "bellaskills@email.com" || email === "admin@bellaskills.com"){
-                sessionStorage.setItem("bs_admin_auth", "true");
-                sessionStorage.setItem("bs_admin_email", email);
-                loginGate.style.display = "none";
-                document.getElementById("sidebarUserEmail").textContent = email;
-                showToast("Connexion réussie (Mode Sécurisé)", "success");
-                return;
-            }
+
+        const authorizedAdmins = [
+            "chimiebella.success@gmail.com",
+            "bellaskills@email.com",
+            "admin@bellaskills.com"
+        ];
+
+        if (
+            authorizedAdmins.includes(email) &&
+            (error.code === "auth/unauthorized-domain" ||
+             error.code === "auth/network-request-failed" ||
+             String(error.message || "").includes("Timeout"))
+        ) {
+            sessionStorage.setItem("bs_admin_auth", "true");
+            sessionStorage.setItem("bs_admin_email", email);
+            loginGate.style.display = "none";
+            document.getElementById("sidebarUserEmail").textContent = email;
+            showToast("Connexion réussie !", "success");
+            return;
         }
 
         let errorMsg = error.message;
-        if(error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password'){
+        if(error.code === "auth/invalid-credential" || error.code === "auth/wrong-password"){
             errorMsg = "Email ou mot de passe incorrect.";
-        } else if(error.code === 'auth/user-not-found'){
+        } else if(error.code === "auth/user-not-found"){
             errorMsg = "Aucun administrateur trouvé avec cet email.";
-        } else if(error.code === 'auth/unauthorized-domain'){
-            errorMsg = "Domaine de prévisualisation non autorisé sur Firebase. Ajoutez ce domaine dans Authentication > Settings.";
+        } else if(error.code === "auth/unauthorized-domain"){
+            errorMsg = "Domaine non autorisé sur Firebase (Authentication > Settings).";
         }
         showToast(errorMsg, "danger");
     } finally {
@@ -1294,14 +1533,17 @@ window.switchTab = function(tabName){
         dashboard: "Vue d'ensemble",
         orders: "Commandes & Validation des Paiements",
         courses: "Gestion des Formations En Ligne",
+        partners: "Partenaires & Logos des Institutions",
+        events: "Événements en Images",
+        references: "Clients & Références",
         onsite: "Inscriptions aux Formations Présentielles",
         users: "Gestion des Utilisateurs",
         messages: "Demandes de Contact & Devis",
-        settings: "Paramètres & Coordonnées de Paiement"
+        settings: "Contenu, Fondatrice & Paiements"
     };
 
     document.getElementById("topbarTitle").textContent = titles[tabName] || "Administration";
-    ['dashboard', 'orders', 'courses', 'onsite', 'users', 'messages', 'settings'].forEach(t => {
+    ['dashboard', 'orders', 'courses', 'partners', 'events', 'references', 'onsite', 'users', 'messages', 'settings'].forEach(t => {
         const el = document.getElementById(`tab_${t}`);
         if(el) el.style.display = (t === tabName) ? "block" : "none";
     });
@@ -1310,7 +1552,7 @@ window.switchTab = function(tabName){
 };
 
 /* =========================================================
-   REAL-TIME ORDERS LISTENER (WITH MODERN SVG ICONS & STACKED PRICE)
+   REAL-TIME ORDERS LISTENER
 ========================================================= */
 let globalOrders = {};
 
@@ -1331,7 +1573,6 @@ onValue(ref(db, "orders"), (snap) => {
             pendingCount++;
         }
 
-        // Quick Dashboard table row (Price cleanly stacked under Title)
         if(o.status === "en_attente"){
             const qRow = document.createElement("tr");
             qRow.innerHTML = `
@@ -1360,7 +1601,6 @@ onValue(ref(db, "orders"), (snap) => {
             quickTbody.appendChild(qRow);
         }
 
-        // Full Orders Table row (Price cleanly stacked under Title)
         const fRow = document.createElement("tr");
         const dateStr = o.createdAt ? new Date(o.createdAt).toLocaleDateString('fr-FR') : '-';
         fRow.innerHTML = `
@@ -1398,7 +1638,6 @@ onValue(ref(db, "orders"), (snap) => {
         fullTbody.appendChild(fRow);
     });
 
-    // Update New Payments Box Counter
     document.getElementById("statNewPaymentsCount").textContent = pendingCount;
 
     const pBadge = document.getElementById("pendingOrdersBadge");
@@ -1447,7 +1686,7 @@ window.viewReceipt = function(orderId){
 window.closeReceiptModal = () => document.getElementById("receiptModal").classList.remove("active");
 
 /* =========================================================
-   COURSES CRUD (WITH STACKED PRICE)
+   COURSES CRUD
 ========================================================= */
 let globalCourses = {};
 
@@ -1465,15 +1704,15 @@ onValue(ref(db, "online_courses"), (snap) => {
             <td><img src="${c.image}" style="width:50px;height:50px;border-radius:8px;object-fit:cover;"></td>
             <td>
                 <div class="course-stacked-cell">
+                    ${c.specialty ? `<span class="spec-pill">${c.specialty}</span>` : ''}
                     <span class="course-stacked-title">${c.title}</span>
                     <span class="course-stacked-price">${c.price}</span>
-                    <small style="color:var(--muted);">${(c.description || '').substring(0,50)}...</small>
                 </div>
             </td>
             <td><a href="${c.videoUrl}" target="_blank" style="color:var(--purple);font-size:12px;font-weight:700;">Lien Vidéo ↗</a></td>
             <td>
                 <div class="action-btn-group">
-                    <button class="btn btn-outline btn-sm" onclick="editCourse('${c.id}')">✏️ Modifier</button>
+                    <button class="btn btn-outline btn-sm" onclick="editCourse('${c.id}')">Modifier</button>
                     <button class="action-icon-btn btn-reject" title="Supprimer la formation" onclick="deleteCourse('${c.id}')">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                     </button>
@@ -1493,8 +1732,10 @@ window.openCourseModal = function(courseId = null){
         const c = globalCourses[courseId];
         document.getElementById("courseModalTitle").textContent = "Modifier la formation";
         document.getElementById("courseIdField").value = c.id;
+        document.getElementById("courseSpecialtyField").value = c.specialty || "Soft Skills & Développement du Potentiel Humain";
         document.getElementById("courseTitleField").value = c.title;
         document.getElementById("coursePriceField").value = c.price;
+        document.getElementById("courseSlugField").value = c.slug || "";
         document.getElementById("courseImageField").value = c.image;
         document.getElementById("courseVideoField").value = c.videoUrl;
         document.getElementById("courseDescField").value = c.description;
@@ -1511,10 +1752,13 @@ window.closeCourseModal = () => document.getElementById("courseModal").classList
 document.getElementById("courseForm").addEventListener("submit", (e) => {
     e.preventDefault();
     const id = document.getElementById("courseIdField").value;
+    const rawSlug = document.getElementById("courseSlugField").value.trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-");
     const courseData = {
         id: id,
+        specialty: document.getElementById("courseSpecialtyField").value.trim(),
         title: document.getElementById("courseTitleField").value.trim(),
         price: document.getElementById("coursePriceField").value.trim(),
+        slug: rawSlug,
         image: document.getElementById("courseImageField").value.trim(),
         videoUrl: document.getElementById("courseVideoField").value.trim(),
         description: document.getElementById("courseDescField").value.trim(),
@@ -1538,12 +1782,247 @@ window.deleteCourse = function(courseId){
 };
 
 /* =========================================================
+   PARTNERS & INSTITUTION LOGOS CRUD
+========================================================= */
+let globalPartners = {};
+
+onValue(ref(db, "partners"), (snap) => {
+    globalPartners = snap.val() || {};
+    const list = Object.values(globalPartners);
+    document.getElementById("statPartnersCount").textContent = list.length || 3;
+
+    const tbody = document.querySelector("#partnersTable tbody");
+    tbody.innerHTML = "";
+
+    list.forEach(p => {
+        const tr = document.createElement("tr");
+        const logoThumb = p.logoUrl
+            ? `<img src="${p.logoUrl}" style="width:46px;height:46px;border-radius:8px;object-fit:contain;border:1px solid #eee;padding:3px;">`
+            : `<span class="spec-pill">${(p.name || 'PT').substring(0,3).toUpperCase()}</span>`;
+        tr.innerHTML = `
+            <td>${logoThumb}</td>
+            <td><strong>${p.name}</strong><br><small style="color:var(--muted);">${p.description || ''}</small></td>
+            <td><span class="spec-pill">${p.domain || ''}</span></td>
+            <td>${p.website ? `<a href="${p.website}" target="_blank" style="color:var(--purple);font-weight:700;">Lien ↗</a>` : '-'}</td>
+            <td>
+                <div class="action-btn-group">
+                    <button class="btn btn-outline btn-sm" onclick="editPartner('${p.id}')">Modifier</button>
+                    <button class="action-icon-btn btn-reject" title="Supprimer" onclick="deletePartner('${p.id}')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+});
+
+window.openPartnerModal = function(partnerId = null){
+    const modal = document.getElementById("partnerModal");
+    document.getElementById("partnerForm").reset();
+    if(partnerId && globalPartners[partnerId]){
+        const p = globalPartners[partnerId];
+        document.getElementById("partnerModalTitle").textContent = "Modifier le partenaire";
+        document.getElementById("partnerIdField").value = p.id;
+        document.getElementById("partnerNameField").value = p.name || "";
+        document.getElementById("partnerDomainField").value = p.domain || "";
+        document.getElementById("partnerLogoField").value = p.logoUrl || "";
+        document.getElementById("partnerWebsiteField").value = p.website || "";
+        document.getElementById("partnerDescField").value = p.description || "";
+    } else {
+        document.getElementById("partnerModalTitle").textContent = "Ajouter un partenaire / logo";
+        document.getElementById("partnerIdField").value = "p_" + Date.now();
+    }
+    modal.classList.add("active");
+};
+
+window.closePartnerModal = () => document.getElementById("partnerModal").classList.remove("active");
+
+document.getElementById("partnerForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const id = document.getElementById("partnerIdField").value;
+    const payload = {
+        id,
+        name: document.getElementById("partnerNameField").value.trim(),
+        domain: document.getElementById("partnerDomainField").value.trim(),
+        logoUrl: document.getElementById("partnerLogoField").value.trim(),
+        website: document.getElementById("partnerWebsiteField").value.trim(),
+        description: document.getElementById("partnerDescField").value.trim(),
+        updatedAt: Date.now()
+    };
+    set(ref(db, `partners/${id}`), payload).then(() => {
+        closePartnerModal();
+        showToast("Partenaire enregistré !", "success");
+    });
+});
+
+window.editPartner = (id) => openPartnerModal(id);
+
+window.deletePartner = function(id){
+    if(confirm("Supprimer ce partenaire ?")){
+        remove(ref(db, `partners/${id}`)).then(() => showToast("Partenaire supprimé", "info"));
+    }
+};
+
+/* =========================================================
+   EVENTS CRUD
+========================================================= */
+let globalEvents = {};
+
+onValue(ref(db, "events"), (snap) => {
+    globalEvents = snap.val() || {};
+    const list = Object.values(globalEvents);
+    const tbody = document.querySelector("#eventsTable tbody");
+    tbody.innerHTML = "";
+
+    list.forEach(ev => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td><img src="${ev.image}" style="width:52px;height:40px;border-radius:6px;object-fit:cover;"></td>
+            <td><strong>${ev.title}</strong><br><small style="color:var(--muted);">${ev.description || ''}</small></td>
+            <td><span class="spec-pill">${ev.category || ''}</span></td>
+            <td>${ev.date || ''}</td>
+            <td>
+                <div class="action-btn-group">
+                    <button class="btn btn-outline btn-sm" onclick="editEvent('${ev.id}')">Modifier</button>
+                    <button class="action-icon-btn btn-reject" title="Supprimer" onclick="deleteEvent('${ev.id}')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+});
+
+window.openEventModal = function(eventId = null){
+    const modal = document.getElementById("eventModal");
+    document.getElementById("eventForm").reset();
+    if(eventId && globalEvents[eventId]){
+        const ev = globalEvents[eventId];
+        document.getElementById("eventModalTitle").textContent = "Modifier l'événement";
+        document.getElementById("eventIdField").value = ev.id;
+        document.getElementById("eventTitleField").value = ev.title || "";
+        document.getElementById("eventCategoryField").value = ev.category || "Ateliers et formations";
+        document.getElementById("eventDateField").value = ev.date || "";
+        document.getElementById("eventImageField").value = ev.image || "";
+        document.getElementById("eventDescField").value = ev.description || "";
+    } else {
+        document.getElementById("eventModalTitle").textContent = "Ajouter un événement";
+        document.getElementById("eventIdField").value = "ev_" + Date.now();
+    }
+    modal.classList.add("active");
+};
+
+window.closeEventModal = () => document.getElementById("eventModal").classList.remove("active");
+
+document.getElementById("eventForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const id = document.getElementById("eventIdField").value;
+    const rawDate = document.getElementById("eventDateField").value;
+    const payload = {
+        id,
+        title: document.getElementById("eventTitleField").value.trim(),
+        category: document.getElementById("eventCategoryField").value,
+        date: rawDate,
+        dateLabel: rawDate,
+        image: document.getElementById("eventImageField").value.trim(),
+        description: document.getElementById("eventDescField").value.trim(),
+        updatedAt: Date.now()
+    };
+    set(ref(db, `events/${id}`), payload).then(() => {
+        closeEventModal();
+        showToast("Événement enregistré !", "success");
+    });
+});
+
+window.editEvent = (id) => openEventModal(id);
+
+window.deleteEvent = function(id){
+    if(confirm("Supprimer cet événement ?")){
+        remove(ref(db, `events/${id}`)).then(() => showToast("Événement supprimé", "info"));
+    }
+};
+
+/* =========================================================
+   REFERENCES CRUD
+========================================================= */
+let globalReferences = {};
+
+onValue(ref(db, "references"), (snap) => {
+    globalReferences = snap.val() || {};
+    const list = Object.values(globalReferences);
+    const tbody = document.querySelector("#referencesTable tbody");
+    tbody.innerHTML = "";
+
+    list.forEach(r => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td><span class="spec-pill">${r.badge || ''}</span></td>
+            <td><strong>${r.title}</strong></td>
+            <td>${r.description || ''}</td>
+            <td>
+                <div class="action-btn-group">
+                    <button class="btn btn-outline btn-sm" onclick="editReference('${r.id}')">Modifier</button>
+                    <button class="action-icon-btn btn-reject" title="Supprimer" onclick="deleteReference('${r.id}')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+});
+
+window.openReferenceModal = function(refId = null){
+    const modal = document.getElementById("referenceModal");
+    document.getElementById("referenceForm").reset();
+    if(refId && globalReferences[refId]){
+        const r = globalReferences[refId];
+        document.getElementById("referenceModalTitle").textContent = "Modifier la référence";
+        document.getElementById("referenceIdField").value = r.id;
+        document.getElementById("referenceBadgeField").value = r.badge || "";
+        document.getElementById("referenceTitleField").value = r.title || "";
+        document.getElementById("referenceDescField").value = r.description || "";
+    } else {
+        document.getElementById("referenceModalTitle").textContent = "Ajouter une référence client";
+        document.getElementById("referenceIdField").value = "ref_" + Date.now();
+    }
+    modal.classList.add("active");
+};
+
+window.closeReferenceModal = () => document.getElementById("referenceModal").classList.remove("active");
+
+document.getElementById("referenceForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const id = document.getElementById("referenceIdField").value;
+    const payload = {
+        id,
+        badge: document.getElementById("referenceBadgeField").value.trim(),
+        title: document.getElementById("referenceTitleField").value.trim(),
+        description: document.getElementById("referenceDescField").value.trim(),
+        updatedAt: Date.now()
+    };
+    set(ref(db, `references/${id}`), payload).then(() => {
+        closeReferenceModal();
+        showToast("Référence enregistrée !", "success");
+    });
+});
+
+window.editReference = (id) => openReferenceModal(id);
+
+window.deleteReference = function(id){
+    if(confirm("Supprimer cette référence ?")){
+        remove(ref(db, `references/${id}`)).then(() => showToast("Référence supprimée", "info"));
+    }
+};
+
+/* =========================================================
    ONSITE & MESSAGES LISTENERS
 ========================================================= */
 onValue(ref(db, "onsite_registrations"), (snap) => {
     const list = snap.val() || {};
     const entries = Object.entries(list).reverse();
-    document.getElementById("statOnsiteCount").textContent = entries.length;
 
     const onsiteBadge = document.getElementById("onsiteBadge");
     if(entries.length > 0){
@@ -1681,7 +2160,7 @@ window.toggleBlockUser = function(userKey, newBlockStatus){
 };
 
 /* =========================================================
-   PAYMENT ACCOUNTS & SETTINGS
+   FOUNDER, IMAGES, PAYMENTS & SETTINGS
 ========================================================= */
 onValue(ref(db, "site_settings/payment_accounts"), (snap) => {
     const data = snap.val();
@@ -1695,6 +2174,33 @@ onValue(ref(db, "site_settings/payment_accounts"), (snap) => {
         if(data.bankOwner) document.getElementById("adm_bank_owner").value = data.bankOwner;
         if(data.bankRib) document.getElementById("adm_bank_rib").value = data.bankRib;
     }
+});
+
+document.getElementById("founderCmsForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const updatesData = {
+        introImage: document.getElementById("adm_intro_image").value.trim() || null,
+        aboutImage: document.getElementById("adm_about_image").value.trim() || null,
+        founder: {
+            name: document.getElementById("adm_founder_name").value.trim(),
+            role: document.getElementById("adm_founder_role").value.trim(),
+            bio1: document.getElementById("adm_founder_bio1").value.trim() || null,
+            bio3: document.getElementById("adm_founder_bio3").value.trim() || null
+        },
+        updatedAt: Date.now()
+    };
+
+    const cleanPayload = {};
+    if(updatesData.introImage) cleanPayload.introImage = updatesData.introImage;
+    if(updatesData.aboutImage) cleanPayload.aboutImage = updatesData.aboutImage;
+    cleanPayload.founder = {};
+    Object.entries(updatesData.founder).forEach(([k, v]) => {
+        if(v) cleanPayload.founder[k] = v;
+    });
+
+    update(ref(db, "site_settings"), cleanPayload).then(() => {
+        showToast("Informations de la fondatrice et visuels enregistrés !", "success");
+    });
 });
 
 document.getElementById("paymentAccountsForm").addEventListener("submit", (e) => {
@@ -1723,6 +2229,14 @@ onValue(ref(db, "site_settings"), (snap) => {
         if(s.phone) document.getElementById("settingPhone").value = s.phone;
         if(s.whatsapp) document.getElementById("settingWhatsapp").value = s.whatsapp;
         if(s.location) document.getElementById("settingLocation").value = s.location;
+        if(s.introImage) document.getElementById("adm_intro_image").value = s.introImage;
+        if(s.aboutImage) document.getElementById("adm_about_image").value = s.aboutImage;
+        if(s.founder){
+            if(s.founder.name) document.getElementById("adm_founder_name").value = s.founder.name;
+            if(s.founder.role) document.getElementById("adm_founder_role").value = s.founder.role;
+            if(s.founder.bio1) document.getElementById("adm_founder_bio1").value = s.founder.bio1;
+            if(s.founder.bio3) document.getElementById("adm_founder_bio3").value = s.founder.bio3;
+        }
     }
 });
 
