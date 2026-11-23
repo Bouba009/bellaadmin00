@@ -639,6 +639,59 @@ tr:hover td{
     border-color:var(--purple);
 }
 
+.media-picker-box{
+    background:#FAF8FC;
+    border:1px solid #E4DDF0;
+    border-radius:12px;
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.media-picker-row{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+.media-picker-row input[type="text"],
+.media-picker-row input[type="url"]{
+    flex:1;
+    min-width:180px;
+}
+
+.upload-file-btn{
+    background:var(--purple-soft);
+    color:var(--purple-dark);
+    border:1px dashed var(--purple);
+    padding:9px 14px;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    white-space:nowrap;
+    transition:.2s;
+}
+
+.upload-file-btn:hover{
+    background:var(--purple);
+    color:white;
+}
+
+.media-preview-thumb{
+    width:68px;
+    height:52px;
+    border-radius:8px;
+    object-fit:cover;
+    border:1px solid #DDD5EA;
+    background:white;
+}
+
 .grid-2{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -1137,7 +1190,7 @@ tr:hover td{
             <!-- FONDATRICE & VISUELS DU SITE -->
             <div class="card">
                 <div class="card-header">
-                    <h3>Fondatrice (Lynda Ahmed BGD) & Visuels du Site</h3>
+                    <h3>Notre Fondatrice (Lynda Ahmed BGD) & Visuels du Site</h3>
                 </div>
                 <form id="founderCmsForm">
                     <div class="grid-2">
@@ -1150,16 +1203,51 @@ tr:hover td{
                             <input type="text" id="adm_founder_role" value="Fondatrice et CEO de BellaSkills Hub" required>
                         </div>
                     </div>
-                    <div class="grid-2">
-                        <div class="form-group">
-                            <label>URL Image Section Qui sommes-nous</label>
-                            <input type="url" id="adm_intro_image" placeholder="https://...">
-                        </div>
-                        <div class="form-group">
-                            <label>URL Image Section À propos</label>
-                            <input type="url" id="adm_about_image" placeholder="https://...">
+
+                    <div class="form-group">
+                        <label>Photo de Notre Fondatrice (Lien URL ou Upload depuis l'appareil)</label>
+                        <div class="media-picker-box">
+                            <div class="media-picker-row">
+                                <input type="text" id="adm_founder_image" placeholder="https://... أو ارفع صورة من الجهاز">
+                                <label class="upload-file-btn">
+                                    <span>Choisir une image</span>
+                                    <input type="file" accept="image/*" style="display:none;" onchange="handleImageUpload(this, 'adm_founder_image', 'preview_founder_image')">
+                                </label>
+                                <img id="preview_founder_image" class="media-preview-thumb" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=700&q=80" alt="Aperçu Fondatrice">
+                            </div>
                         </div>
                     </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Image Section Qui sommes-nous (Lien URL ou Upload)</label>
+                            <div class="media-picker-box">
+                                <div class="media-picker-row">
+                                    <input type="text" id="adm_intro_image" placeholder="https://... أو ارفع صورة">
+                                    <label class="upload-file-btn">
+                                        <span>Upload</span>
+                                        <input type="file" accept="image/*" style="display:none;" onchange="handleImageUpload(this, 'adm_intro_image', 'preview_intro_image')">
+                                    </label>
+                                    <img id="preview_intro_image" class="media-preview-thumb" src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=700&q=80" alt="Aperçu Intro">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Image Section À propos (Lien URL ou Upload)</label>
+                            <div class="media-picker-box">
+                                <div class="media-picker-row">
+                                    <input type="text" id="adm_about_image" placeholder="https://... أو ارفع صورة">
+                                    <label class="upload-file-btn">
+                                        <span>Upload</span>
+                                        <input type="file" accept="image/*" style="display:none;" onchange="handleImageUpload(this, 'adm_about_image', 'preview_about_image')">
+                                    </label>
+                                    <img id="preview_about_image" class="media-preview-thumb" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=700&q=80" alt="Aperçu About">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label>Parcours & Biographie (Paragraphe 1)</label>
                         <textarea id="adm_founder_bio1" rows="3"></textarea>
@@ -1274,8 +1362,17 @@ tr:hover td{
                 </div>
             </div>
             <div class="form-group">
-                <label>URL de l'image de couverture</label>
-                <input type="url" id="courseImageField" required placeholder="https://images.unsplash.com/...">
+                <label>Image de couverture (Lien URL ou Upload)</label>
+                <div class="media-picker-box">
+                    <div class="media-picker-row">
+                        <input type="text" id="courseImageField" required placeholder="https://... أو ارفع صورة">
+                        <label class="upload-file-btn">
+                            <span>Upload</span>
+                            <input type="file" accept="image/*" style="display:none;" onchange="handleImageUpload(this, 'courseImageField', 'preview_course_image')">
+                        </label>
+                        <img id="preview_course_image" class="media-preview-thumb" src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=700&q=80" alt="Aperçu">
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <label>URL Vidéo YouTube Embed</label>
@@ -1306,8 +1403,17 @@ tr:hover td{
                 <input type="text" id="partnerDomainField" required placeholder="ex: Conseil & Stratégie d'Entreprise">
             </div>
             <div class="form-group">
-                <label>URL du Logo de l'institution (Image)</label>
-                <input type="url" id="partnerLogoField" placeholder="https://...">
+                <label>Logo de l'institution (Lien URL ou Upload)</label>
+                <div class="media-picker-box">
+                    <div class="media-picker-row">
+                        <input type="text" id="partnerLogoField" placeholder="https://... أو ارفع شعار المؤسسة">
+                        <label class="upload-file-btn">
+                            <span>Upload Logo</span>
+                            <input type="file" accept="image/*" style="display:none;" onchange="handleImageUpload(this, 'partnerLogoField', 'preview_partner_logo')">
+                        </label>
+                        <img id="preview_partner_logo" class="media-preview-thumb" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimZMGp5BR7hQp2daYfz6ii_IJ4wWEWk347tsUnOn42aD1hNGww9MAb17n3m9Qiwxc4-iyCYhjuPI-kQHJKLCZ2YrplFnSh5YGWTlpZ90DxQUjtwszIJXTtWRJdhz56qv3eh3QLGehQCUcZibgMvmg0UyXd0ewj3C-PY0xg_WTvoqTMcNFRRWsJ2fnTOYY/s320/1000013350.png" alt="Logo">
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <label>Lien du site web (optionnel)</label>
@@ -1349,8 +1455,17 @@ tr:hover td{
                 </div>
             </div>
             <div class="form-group">
-                <label>URL de l'image</label>
-                <input type="url" id="eventImageField" required placeholder="https://images.unsplash.com/...">
+                <label>Image de l'événement (Lien URL ou Upload)</label>
+                <div class="media-picker-box">
+                    <div class="media-picker-row">
+                        <input type="text" id="eventImageField" required placeholder="https://... أو ارفع صورة">
+                        <label class="upload-file-btn">
+                            <span>Upload</span>
+                            <input type="file" accept="image/*" style="display:none;" onchange="handleImageUpload(this, 'eventImageField', 'preview_event_image')">
+                        </label>
+                        <img id="preview_event_image" class="media-preview-thumb" src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=700&q=80" alt="Aperçu">
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <label>Description</label>
@@ -1433,6 +1548,45 @@ window.showToast = function(msg, type="info"){
     setTimeout(() => { t.remove(); }, 4000);
 };
 
+/* Helper: Upload image from device with compression into input + preview */
+window.handleImageUpload = function(fileInput, targetInputId, previewImgId){
+    const file = fileInput.files && fileInput.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(evt){
+        const img = new Image();
+        img.onload = function(){
+            const canvas = document.createElement("canvas");
+            const maxDim = 900;
+            let w = img.width;
+            let h = img.height;
+            if(w > h && w > maxDim){
+                h = Math.round((h * maxDim) / w);
+                w = maxDim;
+            } else if(h > maxDim){
+                w = Math.round((w * maxDim) / h);
+                h = maxDim;
+            }
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, w, h);
+            const dataUrl = canvas.toDataURL("image/jpeg", 0.8);
+
+            const targetEl = document.getElementById(targetInputId);
+            if(targetEl) targetEl.value = dataUrl;
+
+            const prevEl = document.getElementById(previewImgId);
+            if(prevEl) prevEl.src = dataUrl;
+
+            showToast("تم رفع الصورة وتجهيزها بنجاح", "success");
+        };
+        img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+};
+
 if(sessionStorage.getItem("bs_admin_auth") === "true"){
     loginGate.style.display = "none";
     document.getElementById("sidebarUserEmail").textContent = sessionStorage.getItem("bs_admin_email") || "Admin Connecté";
@@ -1465,7 +1619,7 @@ window.loginWithFirebaseAuth = async function(){
     btn.disabled = true;
     btn.textContent = "Authentification...";
 
-    const timeoutPromise = new Promise((_, reject) => 
+    const timeoutPromise = new Promise((_, reject) =>
         setTimeout(() => reject(new Error("Délai d'attente dépassé (Timeout).")), 15000)
     );
 
@@ -1737,11 +1891,13 @@ window.openCourseModal = function(courseId = null){
         document.getElementById("coursePriceField").value = c.price;
         document.getElementById("courseSlugField").value = c.slug || "";
         document.getElementById("courseImageField").value = c.image;
+        document.getElementById("preview_course_image").src = c.image || "";
         document.getElementById("courseVideoField").value = c.videoUrl;
         document.getElementById("courseDescField").value = c.description;
     } else {
         document.getElementById("courseModalTitle").textContent = "Ajouter une formation";
         document.getElementById("courseIdField").value = "c_" + Date.now();
+        document.getElementById("preview_course_image").src = "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=700&q=80";
     }
 
     modal.classList.add("active");
@@ -1827,11 +1983,13 @@ window.openPartnerModal = function(partnerId = null){
         document.getElementById("partnerNameField").value = p.name || "";
         document.getElementById("partnerDomainField").value = p.domain || "";
         document.getElementById("partnerLogoField").value = p.logoUrl || "";
+        document.getElementById("preview_partner_logo").src = p.logoUrl || "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimZMGp5BR7hQp2daYfz6ii_IJ4wWEWk347tsUnOn42aD1hNGww9MAb17n3m9Qiwxc4-iyCYhjuPI-kQHJKLCZ2YrplFnSh5YGWTlpZ90DxQUjtwszIJXTtWRJdhz56qv3eh3QLGehQCUcZibgMvmg0UyXd0ewj3C-PY0xg_WTvoqTMcNFRRWsJ2fnTOYY/s320/1000013350.png";
         document.getElementById("partnerWebsiteField").value = p.website || "";
         document.getElementById("partnerDescField").value = p.description || "";
     } else {
         document.getElementById("partnerModalTitle").textContent = "Ajouter un partenaire / logo";
         document.getElementById("partnerIdField").value = "p_" + Date.now();
+        document.getElementById("preview_partner_logo").src = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEimZMGp5BR7hQp2daYfz6ii_IJ4wWEWk347tsUnOn42aD1hNGww9MAb17n3m9Qiwxc4-iyCYhjuPI-kQHJKLCZ2YrplFnSh5YGWTlpZ90DxQUjtwszIJXTtWRJdhz56qv3eh3QLGehQCUcZibgMvmg0UyXd0ewj3C-PY0xg_WTvoqTMcNFRRWsJ2fnTOYY/s320/1000013350.png";
     }
     modal.classList.add("active");
 };
@@ -1906,10 +2064,12 @@ window.openEventModal = function(eventId = null){
         document.getElementById("eventCategoryField").value = ev.category || "Ateliers et formations";
         document.getElementById("eventDateField").value = ev.date || "";
         document.getElementById("eventImageField").value = ev.image || "";
+        document.getElementById("preview_event_image").src = ev.image || "";
         document.getElementById("eventDescField").value = ev.description || "";
     } else {
         document.getElementById("eventModalTitle").textContent = "Ajouter un événement";
         document.getElementById("eventIdField").value = "ev_" + Date.now();
+        document.getElementById("preview_event_image").src = "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=700&q=80";
     }
     modal.classList.add("active");
 };
@@ -2178,25 +2338,26 @@ onValue(ref(db, "site_settings/payment_accounts"), (snap) => {
 
 document.getElementById("founderCmsForm").addEventListener("submit", (e) => {
     e.preventDefault();
-    const updatesData = {
-        introImage: document.getElementById("adm_intro_image").value.trim() || null,
-        aboutImage: document.getElementById("adm_about_image").value.trim() || null,
+    const founderImg = document.getElementById("adm_founder_image").value.trim() || null;
+    const introImg = document.getElementById("adm_intro_image").value.trim() || null;
+    const aboutImg = document.getElementById("adm_about_image").value.trim() || null;
+
+    const cleanPayload = {
         founder: {
             name: document.getElementById("adm_founder_name").value.trim(),
-            role: document.getElementById("adm_founder_role").value.trim(),
-            bio1: document.getElementById("adm_founder_bio1").value.trim() || null,
-            bio3: document.getElementById("adm_founder_bio3").value.trim() || null
+            role: document.getElementById("adm_founder_role").value.trim()
         },
         updatedAt: Date.now()
     };
 
-    const cleanPayload = {};
-    if(updatesData.introImage) cleanPayload.introImage = updatesData.introImage;
-    if(updatesData.aboutImage) cleanPayload.aboutImage = updatesData.aboutImage;
-    cleanPayload.founder = {};
-    Object.entries(updatesData.founder).forEach(([k, v]) => {
-        if(v) cleanPayload.founder[k] = v;
-    });
+    if(founderImg) cleanPayload.founder.image = founderImg;
+    if(introImg) cleanPayload.introImage = introImg;
+    if(aboutImg) cleanPayload.aboutImage = aboutImg;
+
+    const bio1 = document.getElementById("adm_founder_bio1").value.trim();
+    const bio3 = document.getElementById("adm_founder_bio3").value.trim();
+    if(bio1) cleanPayload.founder.bio1 = bio1;
+    if(bio3) cleanPayload.founder.bio3 = bio3;
 
     update(ref(db, "site_settings"), cleanPayload).then(() => {
         showToast("Informations de la fondatrice et visuels enregistrés !", "success");
@@ -2229,11 +2390,21 @@ onValue(ref(db, "site_settings"), (snap) => {
         if(s.phone) document.getElementById("settingPhone").value = s.phone;
         if(s.whatsapp) document.getElementById("settingWhatsapp").value = s.whatsapp;
         if(s.location) document.getElementById("settingLocation").value = s.location;
-        if(s.introImage) document.getElementById("adm_intro_image").value = s.introImage;
-        if(s.aboutImage) document.getElementById("adm_about_image").value = s.aboutImage;
+        if(s.introImage){
+            document.getElementById("adm_intro_image").value = s.introImage;
+            document.getElementById("preview_intro_image").src = s.introImage;
+        }
+        if(s.aboutImage){
+            document.getElementById("adm_about_image").value = s.aboutImage;
+            document.getElementById("preview_about_image").src = s.aboutImage;
+        }
         if(s.founder){
             if(s.founder.name) document.getElementById("adm_founder_name").value = s.founder.name;
             if(s.founder.role) document.getElementById("adm_founder_role").value = s.founder.role;
+            if(s.founder.image){
+                document.getElementById("adm_founder_image").value = s.founder.image;
+                document.getElementById("preview_founder_image").src = s.founder.image;
+            }
             if(s.founder.bio1) document.getElementById("adm_founder_bio1").value = s.founder.bio1;
             if(s.founder.bio3) document.getElementById("adm_founder_bio3").value = s.founder.bio3;
         }
